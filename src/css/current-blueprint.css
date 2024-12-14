@@ -1,0 +1,61 @@
+.current-blueprint-container {
+    position: relative
+}
+#current-blueprint-name {
+    position: absolute;
+    bottom: 0;
+    right: 1rem;
+    font-size: 6rem;
+    font-weight: bold;
+    color: var(--bg-col-8);
+    z-index: 100;
+}
+
+
+
+.current-blueprint-grid-container {
+    position: relative;
+}
+.current-blueprint-grid-container > * {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-position: inherit;
+}
+.current-blueprint-grid-container {
+    width: 100%;
+    height: 100%;
+    background-position: var(--grid-pos-x) var(--grid-pos-y);
+}
+.current-blueprint-main-grid {
+    background-size: calc(var(--main-grid-size) * var(--zoom)) calc(var(--main-grid-size) * var(--zoom));
+    background-image: linear-gradient(to right, rgb(5,5,5) 1px, transparent 1px), linear-gradient(to bottom, rgb(5,5,5) 1px, transparent 1px);
+    z-index: 2;
+}
+.current-blueprint-secondary-grid {
+    background-size: calc(var(--secondary-grid-size) * var(--zoom)) calc(var(--secondary-grid-size) * var(--zoom));
+    background-image: linear-gradient(to right, rgb(53,53,53) 1px, transparent 1px), linear-gradient(to bottom, rgb(53,53,53) 1px, transparent 1px);
+    z-index: 1;
+}
+
+
+
+#node-container {
+    width: 0px;
+    height: 0px;
+    position: absolute;
+    top: var(--grid-pos-y);
+    left: var(--grid-pos-x);
+    overflow: visible;
+    z-index: 10;
+}
+.node {
+    padding: 0.7rem;
+    position: absolute;
+    background-color: rgba(0,0,0,0.6);
+    border: 1px solid black;
+    border-radius: 0.8rem;
+    font-size: 0.8rem;
+    scale: 0;
+    animation: fade-in-from-center 250ms ease-out forwards;
+}

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Javascript Nodal</title>
+        <link rel="stylesheet" href="css/root.css">
+        <link rel="stylesheet" href="css/base.css">
+        <link rel="stylesheet" href="css/animations.css">
+        <link rel="stylesheet" href="css/frame.css">
+        <link rel="stylesheet" href="css/left-container.css">
+        <link rel="stylesheet" href="css/center-container.css">
+        <link rel="stylesheet" href="css/right-container.css">
+        <link rel="stylesheet" href="css/blueprint-tab.css">
+        <link rel="stylesheet" href="css/current-blueprint.css">
+        <script src="js/base.js"></script>
+        <script src="js/frame.js"></script>
+        <script src="js/functions.js"></script>
+        <script src="js/grid.js"></script>
+        <script src="js/node.js"></script>
+        <script src="js/blueprint.js"></script>
+        <script src="js/events.js"></script>
+        <script src="js/app.js"></script>
+    </head>
+    <body>
+        <header class="frame">
+            <p id="window-title"></p>
+            <div class="drag-area"></div>
+            <div class="buttons-container">
+                <button>
+                    <svg id="frame-minimize" class="fill" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="#000000"><path d="M4 10v1h8v-1z" style="line-height: normal; font-variant-ligatures: normal; font-variant-position: normal; font-variant-caps: normal; font-variant-numeric: normal; font-variant-alternates: normal; font-feature-settings: normal; text-indent: 0px; text-align: start; text-decoration-line: none; text-decoration-style: solid; text-decoration-color: rgb(0, 0, 0); text-transform: none; text-orientation: mixed; isolation: auto; mix-blend-mode: normal; --darkreader-inline-color: #e8e6e3; --darkreader-inline-fill: #60686c;" color="#000000" font-weight="400" font-family="sans-serif" white-space="normal" overflow="visible" fill="#FF0000" data-darkreader-inline-color="" data-darkreader-inline-fill=""></path></svg>
+                </button>
+                <button>
+                    <svg id="frame-maximize" class="fill" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="#000000"><path d="M4 4v8h8V4zm1 1h6v6H5z" style="line-height: normal; font-variant-ligatures: normal; font-variant-position: normal; font-variant-caps: normal; font-variant-numeric: normal; font-variant-alternates: normal; font-feature-settings: normal; text-indent: 0px; text-align: start; text-decoration-line: none; text-decoration-style: solid; text-decoration-color: rgb(0, 0, 0); text-transform: none; text-orientation: mixed; isolation: auto; mix-blend-mode: normal; --darkreader-inline-color: #e8e6e3; --darkreader-inline-fill: #60686c;" color="#000000" font-weight="400" font-family="sans-serif" white-space="normal" overflow="visible" fill="#FF0000" data-darkreader-inline-color="" data-darkreader-inline-fill=""></path></svg>
+                </button>
+                <button>
+                    <svg id="frame-close" class="fill" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="#000000"><path d="M4.795 3.912l-.883.883.147.146L7.117 8 4.06 11.059l-.147.146.883.883.146-.147L8 8.883l3.059 3.058.146.147.883-.883-.147-.146L8.883 8l3.058-3.059.147-.146-.883-.883-.146.147L8 7.117 4.941 4.06z" style="line-height: normal; font-variant-ligatures: normal; font-variant-position: normal; font-variant-caps: normal; font-variant-numeric: normal; font-variant-alternates: normal; font-feature-settings: normal; text-indent: 0px; text-align: start; text-decoration-line: none; text-decoration-style: solid; text-decoration-color: rgb(0, 0, 0); text-transform: none; text-orientation: mixed; isolation: auto; mix-blend-mode: normal; --darkreader-inline-color: #e8e6e3; --darkreader-inline-fill: #60686c;" color="#000000" font-weight="400" font-family="sans-serif" white-space="normal" overflow="visible" fill="#FF0000" fill-rule="evenodd" data-darkreader-inline-color="" data-darkreader-inline-fill=""></path></svg>
+                </button>
+            </div>
+        </header>
+        <div class="page">
+            <section class="left-container">
+                <!-- create class methods -->
+                <!-- create class variables -->
+            </section>
+            <section class="center-container">
+                <nav class="blueprint-tabs-nav">
+                    <ul id="blueprints-tabs"></ul>
+                </nav>
+                <article class="current-blueprint-container">
+                    <div class="current-blueprint-grid-container">
+                        <div class="current-blueprint-main-grid"></div>
+                        <div class="current-blueprint-secondary-grid"></div>
+                    </div>
+                    <div id="node-container"></div>
+                    <h1 id="current-blueprint-name"></h1>
+                </article>
+            </section>
+            <section class="right-container">
+                <!-- current blueprint parameters and returns -->
+            </section>
+        </div>
+    </body>
+</html>

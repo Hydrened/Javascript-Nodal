@@ -1,0 +1,25 @@
+nav.blueprint-tabs-nav {
+    background-color: var(--bg-col-3);
+}
+ul#blueprints-tabs {
+    height: 100%;
+    display: flex;
+}
+ul#blueprints-tabs > li {
+    min-width: 8rem;
+    padding-inline: 0.7rem;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    border-left: 1px solid var(--bg-col-8);
+    cursor: pointer;
+}
+ul#blueprints-tabs > li:last-of-type {
+    border-right: 1px solid var(--bg-col-8);
+}
+ul#blueprints-tabs > li.on {
+    background-color: var(--bg-col-5);
+}
+ul#blueprints-tabs > li:hover {
+    background-color: var(--bg-col-7);
+}

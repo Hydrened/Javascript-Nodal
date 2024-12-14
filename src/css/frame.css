@@ -1,0 +1,44 @@
+header.frame {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    background-color: var(--bg-col-2);
+    z-index: 999999;
+}
+
+
+
+header.frame > p#window-title {
+    padding-inline: 0.8rem;
+    display: flex;
+    align-items: center;
+    font-size: 0.8rem;
+}
+header.frame > div.drag-area {
+    -webkit-app-region: drag;
+}
+header.frame > div.buttons-container {
+    display: flex;
+    -webkit-app-region: no-drag;
+}
+
+
+
+header.frame > div.buttons-container > button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+header.frame > div.buttons-container > button:hover {
+    background-color: rgba(255,255,255,0.2);
+}
+header.frame > div.buttons-container > button:last-child:hover {
+    background-color: var(--bg-col-error);
+}
+
+
+
+header.frame > div.buttons-container > button > svg {
+    width: var(--frame-height);
+    padding: 0.5rem;
+}

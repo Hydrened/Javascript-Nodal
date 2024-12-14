@@ -1,0 +1,4 @@
+section.center-container {
+    display: grid;
+    grid-template-rows: var(--blueprint-tabs-nav-height) 1fr;
+}

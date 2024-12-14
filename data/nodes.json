@@ -1,0 +1,40 @@
+{
+    "0": {
+        "title": "Begin",
+        "parameters": [],
+        "returns": [
+            {
+                "type": "execute"
+            }
+        ]
+    },
+    "1": {
+        "title": "console.log()",
+        "parameters": [
+            {
+                "type": "variable"
+            }
+        ],
+        "returns": [
+            {
+                "type": "execute"
+            }
+        ]
+    },
+    "100": {
+        "title": "+",
+        "parameters": [
+            {
+                "type": "variable"
+            },
+            {
+                "type": "variable"
+            }
+        ],
+        "returns": [
+            {
+                "type": "variable"
+            }
+        ]
+    }
+}

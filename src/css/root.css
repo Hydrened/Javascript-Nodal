@@ -17,6 +17,9 @@
 
     --col-1: rgb(31,114,198);
 
+    --execute-color: rgb(255,255,255);
+    --variable-color: rgb(16, 169, 192);
+
     --scroll-width: 8px;
     --frame-height: 36px;
     --left-container-width: minmax(300px, 20vw);
@@ -27,7 +30,8 @@
     --grid-pos-x: 0;
     --grid-pos-y: 0;
     --main-grid-size: 128px;
-    --secondary-grid-size: calc(var(--main-grid-size) / 8);
+    --main-grid-units: 8;
+    --secondary-grid-size: calc(var(--main-grid-size) / var(--main-grid-units));
 
     --zoom: 1.0;
 }

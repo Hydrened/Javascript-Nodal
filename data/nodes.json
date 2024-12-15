@@ -4,36 +4,46 @@
         "parameters": [],
         "returns": [
             {
-                "type": "execute"
+                "type": "execute",
+                "title": ""
             }
         ]
     },
     "1": {
-        "title": "console.log()",
+        "title": "Console Log",
         "parameters": [
             {
-                "type": "variable"
+                "type": "execute",
+                "title": ""
+            },
+            {
+                "type": "variable",
+                "title": "Value"
             }
         ],
         "returns": [
             {
-                "type": "execute"
+                "type": "execute",
+                "title": ""
             }
         ]
     },
     "100": {
-        "title": "+",
+        "title": "Add",
         "parameters": [
             {
-                "type": "variable"
+                "type": "variable",
+                "title": "Number 1"
             },
             {
-                "type": "variable"
+                "type": "variable",
+                "title": "Number 2"
             }
         ],
         "returns": [
             {
-                "type": "variable"
+                "type": "variable",
+                "title": "Result"
             }
         ]
     }

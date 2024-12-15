@@ -8,29 +8,56 @@ class Node {
         this.uid = (this.blueprint.nodes.length == 0) ? 0 : this.blueprint.nodes.filter((node, index) => node.uid != index + 1).length;
         this.displayed = false;
         this.snap();
+
+        this.element = null;
     }
 
     show() {
         if (!this.app.isCurrentBP(this.blueprint)) return;
         this.displayed = true;
 
-        const node = document.createElement("div");
-        node.classList.add("node");
-        node.style.top = `${this.pos.y}px`;
-        node.style.left = `${this.pos.x}px`;
-        node.id = this.uid;
-        node.setAttribute("node-id", this.id);
-        this.app.elements.center.nodeContainer.appendChild(node);
-        
         const isFunction = this.data.parameters.concat(this.data.returns).filter((v) => v.type == "execute").length > 0;
-        if (isFunction) {
-            const header = document.createElement("header");
-            header.textContent = this.data.title;
-            node.appendChild(header);
-        }        
 
+        this.element = document.createElement("div");
+        this.element.classList.add("node");
+        this.element.classList.add(isFunction ? "function" : "operation");
+        this.updatePos();
+        this.element.id = this.uid;
+        this.element.setAttribute("node-id", this.id);
+        this.app.elements.center.nodeContainer.appendChild(this.element);
+        
+        const header = document.createElement("header");
+        header.textContent = this.data.title;
+        this.element.appendChild(header);
 
-        console.log(node);
+        const inputContainer = document.createElement("ul");
+        inputContainer.classList.add("input-container");
+        this.element.appendChild(inputContainer);
+
+        const outputContainer = document.createElement("ul");
+        outputContainer.classList.add("output-container");
+        this.element.appendChild(outputContainer);
+
+        function createLi(v, parent, isIpnut) {
+            const li = document.createElement("li");
+            parent.appendChild(li);
+
+            const connector = document.createElement("div");
+            connector.classList.add("connector");
+            connector.classList.add(v.type);
+            li.appendChild(connector);
+
+            const title = document.createElement("p");
+            title.textContent = v.title;
+            li.appendChild(title);
+
+            if (!isIpnut || v.type != "variable") return;
+            const input = document.createElement("input");
+            li.appendChild(input);
+        }
+
+        this.data.parameters.forEach((param) => createLi(param, inputContainer, true));
+        this.data.returns.forEach((ret) => createLi(ret, outputContainer, false));
     }
 
     hide() {
@@ -39,7 +66,13 @@ class Node {
     }
 
     snap() {
-        this.pos.x = parseInt(this.pos.x / 8) * 8;
-        this.pos.y = parseInt(this.pos.y / 8) * 8;
+        const snap = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--main-grid-size").slice(0, -2)) / parseInt(getComputedStyle(document.documentElement).getPropertyValue("--main-grid-units"));
+        this.pos.x = parseInt(this.pos.x / snap) * snap;
+        this.pos.y = parseInt(this.pos.y / snap) * snap;
+    }
+
+    updatePos() {
+        this.element.style.top = `${this.pos.y}px`;
+        this.element.style.left = `${this.pos.x}px`;
     }
 };

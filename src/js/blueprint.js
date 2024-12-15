@@ -6,8 +6,8 @@ class Blueprint {
 
         setTimeout(() => {
             this.createNode({ x: 0, y: 0 }, 0);
-            this.createNode({ x: 100, y: 0 }, 1);
-            this.createNode({ x: 50, y: 100 }, 100);
+            this.createNode({ x: 400, y: 0 }, 1);
+            this.createNode({ x: 0, y: 120 }, 100);
         }, 0);
     }
 

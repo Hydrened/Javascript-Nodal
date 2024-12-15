@@ -1,0 +1,85 @@
+.node {
+    min-width: calc(var(--secondary-grid-size) * 10);
+    position: absolute;
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    column-gap: 0.5rem;
+    background-color: rgba(0,0,0,0.6);
+    border: 1px solid black;
+    border-radius: 0.6rem;
+    font-size: 0.75rem;
+    scale: 0;
+    animation: fade-in-from-center 250ms ease-out forwards;
+}
+
+
+
+.node > header {
+    padding: 0.4rem 0.6rem;
+    font-weight: bold;
+    grid-column: 1 / -1;
+}
+.node.function > header {
+    background-color: rgb(240,240,240);
+    color: black;
+}
+.node.operation > header {
+    background-color: black;
+}
+
+
+
+.node > ul.input-container,
+.node > ul.output-container {
+    display: flex;
+    flex-direction: column;
+    overflow: visible;
+}
+
+
+
+.node > ul > li {
+    height: 34px;
+    padding-inline: 0.6rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.node > ul.output-container > li {
+    flex-direction: row-reverse;
+}
+.node > ul > li > p {
+    white-space: nowrap;
+}
+
+
+
+.node > ul > li > .connector {
+    width: 14px;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    background-color: black;
+}
+.node > ul > li > .connector.execute {
+    border: 2px solid var(--execute-color);
+}
+.node > ul > li > .connector.variable {
+    border: 2px solid var(--variable-color);
+}
+.node > ul > li > .connector.execute.connected {
+    background-color: var(--execute-color);
+}
+.node > ul > li > .connector.variable.connected {
+    background-color: var(--variable-color);
+}
+
+
+
+.node > ul > li > input {
+    width: 4rem;
+    padding: 0.2rem 0.35rem;
+    border-radius: 0.3rem;
+}
+.node > ul > li:has(.connector.connected) > input {
+    display: none;
+}

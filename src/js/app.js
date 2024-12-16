@@ -11,6 +11,7 @@ class App {
             center: {
                 blueprintTabs: document.getElementById("blueprints-tabs"),
                 currentBlueprintName: document.getElementById("current-blueprint-name"),
+                currentBlueprintContainer: document.getElementById("current-blueprint-container"),
                 nodeContainer: document.getElementById("node-container"),
             },
             right: {

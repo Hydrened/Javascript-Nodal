@@ -7,9 +7,8 @@ class Node {
         this.id = id;
         this.uid = (this.blueprint.nodes.length == 0) ? 0 : this.blueprint.nodes.filter((node, index) => node.uid != index + 1).length;
         this.displayed = false;
-        this.snap();
-
         this.element = null;
+        this.snap();
     }
 
     show() {
@@ -23,9 +22,8 @@ class Node {
         this.element.classList.add(isFunction ? "function" : "operation");
         this.updatePos();
         this.element.id = this.uid;
-        this.element.setAttribute("node-id", this.id);
         this.app.elements.center.nodeContainer.appendChild(this.element);
-        
+
         const header = document.createElement("header");
         header.textContent = this.data.title;
         this.element.appendChild(header);
@@ -38,20 +36,20 @@ class Node {
         outputContainer.classList.add("output-container");
         this.element.appendChild(outputContainer);
 
-        function createLi(v, parent, isIpnut) {
+        function createLi(v, parent, isParameter) {
             const li = document.createElement("li");
             parent.appendChild(li);
 
-            const connector = document.createElement("div");
-            connector.classList.add("connector");
-            connector.classList.add(v.type);
-            li.appendChild(connector);
+            const linker = document.createElement("div");
+            linker.classList.add("linker");
+            linker.classList.add(v.type);
+            li.appendChild(linker);
 
             const title = document.createElement("p");
             title.textContent = v.title;
             li.appendChild(title);
 
-            if (!isIpnut || v.type != "variable") return;
+            if (!isParameter || v.type != "variable") return;
             const input = document.createElement("input");
             li.appendChild(input);
         }
@@ -62,6 +60,7 @@ class Node {
 
     hide() {
         if (!this.app.isCurrentBP(this.blueprint)) return;
+        this.element.remove();
         this.displayed = false;
     }
 

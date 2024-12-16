@@ -20,8 +20,7 @@
     grid-column: 1 / -1;
 }
 .node.function > header {
-    background-color: rgb(240,240,240);
-    color: black;
+    background-color: rgb(73, 73, 73);
 }
 .node.operation > header {
     background-color: black;
@@ -54,22 +53,32 @@
 
 
 
-.node > ul > li > .connector {
+.node > ul > li > .linker {
     width: 14px;
     aspect-ratio: 1 / 1;
+    position: relative;
     border-radius: 50%;
     background-color: black;
+    overflow: visible;
 }
-.node > ul > li > .connector.execute {
+.node > ul > li > .linker::after {
+    content: "";
+    width: 30px;
+    aspect-ratio: 1 / 1;
+    position: absolute;
+    top: -10px;
+    left: -10px;
+}
+.node > ul > li > .linker.execute {
     border: 2px solid var(--execute-color);
 }
-.node > ul > li > .connector.variable {
+.node > ul > li > .linker.variable {
     border: 2px solid var(--variable-color);
 }
-.node > ul > li > .connector.execute.connected {
+.node > ul > li > .linker.execute.linked {
     background-color: var(--execute-color);
 }
-.node > ul > li > .connector.variable.connected {
+.node > ul > li > .linker.variable.linked {
     background-color: var(--variable-color);
 }
 
@@ -80,6 +89,20 @@
     padding: 0.2rem 0.35rem;
     border-radius: 0.3rem;
 }
-.node > ul > li:has(.connector.connected) > input {
+.node > ul > li:has(.linker.linked) > input {
     display: none;
+}
+
+
+
+.link {
+    position: absolute;
+    border: 2px solid transparent;
+    transform: translateY(-1px);
+}
+.link.execute {
+    border-color: var(--execute-color);
+}
+.link.variable {
+    border-color: var(--variable-color);
 }

@@ -5,7 +5,7 @@ class Node {
         this.data = data;
         this.pos = pos;
         this.id = id;
-        this.uid = (this.blueprint.nodes.length == 0) ? 0 : this.blueprint.nodes.filter((node, index) => node.uid != index + 1).length;
+        this.uid = this.app.getNextNodeUID(blueprint);
         this.displayed = false;
         this.element = null;
         this.snap();
@@ -66,8 +66,8 @@ class Node {
 
     snap() {
         const snap = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--main-grid-size").slice(0, -2)) / parseInt(getComputedStyle(document.documentElement).getPropertyValue("--main-grid-units"));
-        this.pos.x = parseInt(this.pos.x / snap) * snap;
-        this.pos.y = parseInt(this.pos.y / snap) * snap;
+        this.pos.x = Math.round(this.pos.x / snap) * snap;
+        this.pos.y = Math.round(this.pos.y / snap) * snap;
     }
 
     updatePos() {

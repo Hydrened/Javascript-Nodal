@@ -1,0 +1,33 @@
+.contextmenu {
+    width: 15rem;
+    padding: 0.5rem;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    background-color: var(--bg-col-2);
+    z-index: 2000;
+}
+
+
+.contextmenu > input {
+    width: 100%;
+    padding: 0.2rem 0.4rem;
+}
+
+
+.contextmenu > ul {
+    height: 20rem;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg-col-4);
+    overflow-y: scroll;
+}
+.contextmenu > ul > li {
+    padding: 0.2rem 0.3rem;
+    cursor: pointer;
+}
+.contextmenu > ul > li:hover {
+    background-color: var(--bg-col-6);
+}

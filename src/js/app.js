@@ -82,4 +82,35 @@ class App {
     isCurrentBP(bp) {
         return this.currentBlueprint == bp;
     }
+
+    getLinksByNodeUID(uid) {
+        return this.currentBlueprint.links.filter((link) => (link.data.returnNode.uid == uid) || (link.data.parameterNode.uid == uid));
+    }
+
+    getCursorPos(e) {
+        const rect = this.elements.center.currentBlueprintContainer.getBoundingClientRect();
+        const offset = {
+            x: e.x - rect.x,
+            y: e.y - rect.y,
+        };
+        return {
+            x: offset.x - this.grid.pos.x,
+            y: offset.y - this.grid.pos.y,
+        }
+    }
+
+    destroyContextMenu() {
+        this.events.ctxMenu.destroy();
+        this.events.ctxMenu = null;
+    }
+
+    getNextNodeUID(blueprint) {
+        for (let i = 0; i <= blueprint.nodes.length; i++) if (!blueprint.nodes.some(node => node.uid === i)) return i;
+        return blueprint.nodes.length;
+    }
+
+    getNextLinkUID(blueprint) {
+        for (let i = 0; i <= blueprint.links.length; i++) if (!blueprint.links.some(link => link.uid === i)) return i;
+        return 0;
+    }
 };

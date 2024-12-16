@@ -5,7 +5,7 @@ class Grid {
         this.pos = null;
         this.moving = false;
         this.movingOffset = null;
-        this.zoom = 1.0;
+        this.wasMoving = false;
 
         this.element = document.querySelector("div.current-blueprint-grid-container");
 
@@ -27,12 +27,14 @@ class Grid {
         this.element.addEventListener("mousedown", (e) => {
             if (e.button == 0) return;
             this.moving = true;
+            setTimeout(() => this.wasMoving = true, 100);
             const containerRect = this.element.getBoundingClientRect();
             this.movingOffset = { x: this.pos.x - e.x + containerRect.x, y: this.pos.y - e.y + containerRect.y };
         });
         this.element.addEventListener("mouseup", (e) => {
             if (e.button == 0) return;
             this.moving = false;
+            setTimeout(() => this.wasMoving = false, 100);
             this.movingOffset = null;
         });
         this.element.addEventListener("mouseout", () => {
@@ -47,12 +49,6 @@ class Grid {
             this.pos.y = e.y - containerRect.y + this.movingOffset.y;
             this.updatePos();
         });
-
-        // this.element.addEventListener("wheel", (e) => {
-        //     if (e.deltaY > 0 && this.zoom >= 0.6) this.zoom -= 0.1;
-        //     else if ( e.deltaY < 0 && this.zoom <= 2.9) this.zoom += 0.1;
-        //     this.updateZoom();
-        // });
     }
 
     updatePos() {

@@ -4,7 +4,7 @@ class Link {
         this.blueprint = blueprint;
         this.data = data;
         this.displayed = false;
-        this.uid = (this.blueprint.links.length == 0) ? 0 : this.blueprint.links.filter((link, index) => link.uid != index + 1).length;
+        this.uid = this.app.getNextLinkUID(blueprint);
         this.element = null;
     }
 
@@ -53,7 +53,7 @@ class Link {
 
     hide() {
         if (!this.app.isCurrentBP(this.blueprint)) return;
-        this.element.remove();
+        if (this.element) this.element.remove();
         this.displayed = false;
     }
 };

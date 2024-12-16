@@ -6,10 +6,10 @@ class Blueprint {
         this.links = [];
 
         setTimeout(() => {
-            this.createNode({ x: 0, y: 0 }, 0);
-            this.createNode({ x: 400, y: 0 }, 1);
-            this.createNode({ x: 0, y: 120 }, 100);
-            this.createNode({ x: 700, y: 120 }, 1);
+            this.createNode({ x: -400, y: 0 }, 0);
+            this.createNode({ x: 0, y: -50 }, 1);
+            this.createNode({ x: -400, y: 120 }, 100);
+            this.createNode({ x: 300, y: 120 }, 1);
         }, 0);
     }
 
@@ -38,8 +38,14 @@ class Blueprint {
     }
 
     removeNode(uid) {
-        this.nodes = this.nodes.filter((node) => node.uid != uid);
+        this.nodes = this.nodes.filter((node) => {
+            if (node.uid == uid) {
+                node.hide();
+                return false;
+            } else return true;
+        });
         this.refreshNodes();
+        this.app.getLinksByNodeUID(uid).forEach((link) => this.removeLink(link.uid));
     }
 
     linkNodes(returnNode, returnIndex, parameterNode, parameterIndex) {
@@ -60,11 +66,21 @@ class Blueprint {
             },
         }));
 
-        this.refreshLinks();
+        this.app.getLinksByNodeUID(parameterNode.uid).forEach((link) => link.hide());
+        this.links.at(-1).show();
+        setTimeout(() => this.refreshLinks(), 0);
     }
 
     removeLink(uid) {
-        this.links = this.links.filter((link) => link.uid != uid);
+        this.links = this.links.filter((link) => {
+            if (link.uid == uid) {
+                // if (link.data.returnNode.uid)
+                // console.log(link.data);
+                
+                link.hide();
+                return false;
+            } else return true;
+        });
         this.refreshLinks();
     }
 };

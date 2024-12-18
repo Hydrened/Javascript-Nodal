@@ -23,3 +23,32 @@ ul#blueprints-tabs > li.on {
 ul#blueprints-tabs > li:hover {
     background-color: var(--bg-col-7);
 }
+
+
+
+
+nav.blueprint-methods-tabs-nav {
+    background-color: var(--bg-col-5);
+}
+ul#blueprints-methods-tabs {
+    height: 100%;
+    display: flex;
+}
+ul#blueprints-methods-tabs > li {
+    min-width: 8rem;
+    padding-inline: 0.7rem;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    /* border-left: 1px solid var(--bg-col-8); */
+    cursor: pointer;
+}
+ul#blueprints-methods-tabs > li:last-of-type {
+    /* border-right: 1px solid var(--bg-col-8); */
+}
+ul#blueprints-methods-tabs > li.on {
+    /* background-color: var(--bg-col-5); */
+}
+ul#blueprints-methods-tabs > li:hover {
+    /* background-color: var(--bg-col-7); */
+}

@@ -9,6 +9,7 @@
     font-weight: bold;
     color: var(--bg-col-8);
     z-index: 100;
+    pointer-events: none;
 }
 
 

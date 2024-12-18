@@ -10,6 +10,16 @@
         ]
     },
     "1": {
+        "title": "Return",
+        "parameters": [
+            {
+                "type": "execute",
+                "title": ""
+            }
+        ],
+        "returns": []
+    },
+    "10": {
         "title": "Console Log",
         "parameters": [
             {

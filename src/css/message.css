@@ -1,0 +1,25 @@
+.message {
+    padding: 1rem;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    background-color: var(--bg-col-2);
+    border: 2px solid transparent;
+    border-radius: 0.7rem;
+    transform: translateX(-50%) translateY(-100%);
+    cursor: pointer;
+    transition: transform 300ms, background-color 100ms;
+    z-index: 30;
+}
+.message:hover {
+    background-color: var(--bg-col-5);
+}
+.message.show {
+    transform: translateX(-50%) translateY(1rem);
+}
+.message.success {
+    border-color: var(--font-col-success);
+}
+.message.error {
+    border-color: var(--font-col-error);
+}

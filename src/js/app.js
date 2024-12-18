@@ -29,12 +29,12 @@ class App {
         });
     }
 
-    sucess(message) {
-        console.log(message);
+    success(message) {
+        new Message(this, "success", message);
     }
 
     error(message) {
-        console.log(message);
+        new Message(this, "error", message);
     }
 
     async initData() {
@@ -63,6 +63,8 @@ class App {
             const title = document.createElement("h5");
             title.textContent = name;
             li.appendChild(title);
+
+            if (name != "Main") this.success(`Successfully created blueprint "${name}"`);
 
             li.addEventListener("click", () => {
                 if (this.currentBlueprint.name == name) return;
@@ -112,5 +114,19 @@ class App {
     getNextLinkUID(blueprint) {
         for (let i = 0; i <= blueprint.links.length; i++) if (!blueprint.links.some(link => link.uid === i)) return i;
         return 0;
+    }
+
+    getLinkerNbLinks(linker) {
+        const li = linker.parentElement;
+        const ul = li.parentElement;
+        const isParameter = ul.classList.contains("input-container");
+        const nodeUID = parseInt(ul.parentElement.id);
+        const index = [...ul.children].indexOf(li);
+
+        return this.currentBlueprint.links.reduce((acc, link) => {
+            const data = (isParameter) ? link.data.parameterNode : link.data.returnNode;
+            if (data.uid == nodeUID && data.index == index) return acc + 1;
+            else return acc;
+        }, 0);
     }
 };

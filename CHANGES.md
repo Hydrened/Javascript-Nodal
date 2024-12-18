@@ -1,3 +1,10 @@
+## HJN-1.0.4
+#### ADDED
+- node remove
+- error and success messages
+## FIXED
+- begin & return node creation
+
 ## HJN-1.0.3
 #### ADDED
 - node focus

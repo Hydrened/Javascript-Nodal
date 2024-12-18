@@ -2,31 +2,21 @@ class Grid {
     constructor(app) {
         this.app = app;
 
-        this.pos = null;
+        this.pos = { x: 128, y: 128 };
         this.moving = false;
         this.movingOffset = null;
         this.wasMoving = false;
-
-        this.element = document.querySelector("div.current-blueprint-grid-container");
+        this.element = document.querySelector("div.current-class-grid-container");
 
         this.handleEvents();
+        this.updatePos();
     }
 
     handleEvents() {
-        ipcRenderer.on("window-update", (e, data) => {
-            if (!this.pos) {
-                const containerRect = this.element.getBoundingClientRect();
-                this.pos = {
-                    x: containerRect.width / 2,
-                    y: containerRect.height / 2,
-                };
-            } 
-            this.updatePos();
-        });
-        
         this.element.addEventListener("mousedown", (e) => {
             if (e.button == 0) return;
             this.moving = true;
+            this.element.classList.add("moving");
             setTimeout(() => this.wasMoving = true, 100);
             const containerRect = this.element.getBoundingClientRect();
             this.movingOffset = { x: this.pos.x - e.x + containerRect.x, y: this.pos.y - e.y + containerRect.y };
@@ -34,11 +24,13 @@ class Grid {
         this.element.addEventListener("mouseup", (e) => {
             if (e.button == 0) return;
             this.moving = false;
+            this.element.classList.remove("moving");
             setTimeout(() => this.wasMoving = false, 100);
             this.movingOffset = null;
         });
         this.element.addEventListener("mouseout", () => {
             this.moving = false;
+            this.element.classList.remove("moving");
             this.movingOffset = null;
         });
         this.element.addEventListener("mousemove", (e) => {

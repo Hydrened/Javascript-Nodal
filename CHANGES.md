@@ -1,3 +1,16 @@
+## HJN-1.0.5
+#### ADDED
+- class methods
+- class and method navigation
+- cursor for node, moving in grid, moving node, linkers
+- classes, methods and variables managment interface
+- remove class
+- remove method
+## FIXED
+- links don't destroyed when removing unremovable node
+- contextmenu position when overflow edges
+- cant have multiple return execute links
+
 ## HJN-1.0.4
 #### ADDED
 - node remove
@@ -27,8 +40,8 @@
 
 ## HJN-1.0.0
 #### ADDED
-- current blueprint grid
-- current blueprint grid movements
-- current blueprint name display
-- blueprints tabs
-- blueprints
+- current class grid
+- current class grid movements
+- current class name display
+- classs tabs
+- classs

@@ -17,6 +17,9 @@
 
     --col-1: rgb(31,114,198);
 
+    --default-font: "Helvetica";
+    --class-font: "typo draft";
+
     --execute-color: rgb(255,255,255);
     --variable-color: rgb(16, 169, 192);
 
@@ -25,7 +28,7 @@
     --left-container-width: minmax(300px, 20vw);
     --center-container-width: 1fr;
     --right-container-width: minmax(300px, 20vw);
-    --blueprint-tabs-nav-height: 36px;
+    --class-tabs-nav-height: 36px;
 
     --grid-pos-x: 0;
     --grid-pos-y: 0;

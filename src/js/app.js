@@ -6,12 +6,15 @@ class App {
 
         this.elements = {
             left: {
-
+                classList: document.getElementById("class-list-container"),
+                methodList: document.getElementById("method-list-container"),
+                variableList: document.getElementById("variable-list-container"),
             },
             center: {
-                blueprintTabs: document.getElementById("blueprints-tabs"),
-                currentBlueprintName: document.getElementById("current-blueprint-name"),
-                currentBlueprintContainer: document.getElementById("current-blueprint-container"),
+                classTabs: document.getElementById("classes-tabs"),
+                classMethodTabs: document.getElementById("classes-method-tabs"),
+                currentClassMethodName: document.getElementById("current-class-method-name"),
+                currentClassContainer: document.getElementById("current-class-container"),
                 nodeContainer: document.getElementById("node-container"),
             },
             right: {
@@ -19,13 +22,13 @@ class App {
             },
         };
 
-        this.blueprints = {};
-        this.currentBlueprint = null;
+        this.classes = {};
+        this.currentClass = null;
 
         this.initData().then(() => {
             this.events = new Events(this);
             this.grid = new Grid(this);
-            this.createBlueprint("Main");
+            this.createClass("Main");
         });
     }
 
@@ -51,46 +54,35 @@ class App {
         return Promise.all([readWindow, readNodes]).then().catch(err => this.error("ERROR HJN-104 => Could not read json files:", err));
     }
 
-    createBlueprint(name) {
-        if (!Object.keys(this.blueprints).includes(name)) {
-            this.blueprints[name] = new Blueprint(this, name);
-            this.openBlueprint(name);
-
-            const li = document.createElement("li");
-            li.classList.add("on");
-            this.elements.center.blueprintTabs.appendChild(li);
-
-            const title = document.createElement("h5");
-            title.textContent = name;
-            li.appendChild(title);
-
-            if (name != "Main") this.success(`Successfully created blueprint "${name}"`);
-
-            li.addEventListener("click", () => {
-                if (this.currentBlueprint.name == name) return;
-                this.openBlueprint(name);
-            });
-        } else this.error(`A blueprint is already named "${name}"`);
+    createClass(name) {
+        if (!Object.keys(this.classes).includes(name)) {
+            this.classes[name] = new Class(this, name);
+            this.openClass(name);
+            this.refreshClassInterfaces();
+            this.refreshMethodInterfaces();
+            if (name != "Main") this.success(`Successfully created class "${name}"`);
+        } else this.error(`A class is already named "${name}"`);
     }
 
-    openBlueprint(name) {
-        if (!Object.keys(this.blueprints).includes(name)) return;
-        if (this.currentBlueprint) this.currentBlueprint.close();
-        this.currentBlueprint = this.blueprints[name];
-        this.currentBlueprint.open();
-        this.elements.center.currentBlueprintName.textContent = name;
+    removeClass(name) {
+        if (this.currentClass.name == name) this.openClass("Main");
+        delete this.classes[name];
+        this.refreshClassInterfaces();
+        this.refreshMethodInterfaces();
+    }
+
+    openClass(name) {
+        if (this.currentClass) this.currentClass.close();
+        this.currentClass = this.classes[name];
+        this.currentClass.open();
     }
 
     isCurrentBP(bp) {
-        return this.currentBlueprint == bp;
-    }
-
-    getLinksByNodeUID(uid) {
-        return this.currentBlueprint.links.filter((link) => (link.data.returnNode.uid == uid) || (link.data.parameterNode.uid == uid));
+        return this.currentClass == bp;
     }
 
     getCursorPos(e) {
-        const rect = this.elements.center.currentBlueprintContainer.getBoundingClientRect();
+        const rect = this.elements.center.currentClassContainer.getBoundingClientRect();
         const offset = {
             x: e.x - rect.x,
             y: e.y - rect.y,
@@ -106,27 +98,96 @@ class App {
         this.events.ctxMenu = null;
     }
 
-    getNextNodeUID(blueprint) {
-        for (let i = 0; i <= blueprint.nodes.length; i++) if (!blueprint.nodes.some(node => node.uid === i)) return i;
-        return blueprint.nodes.length;
+    refreshClassInterfaces() {
+        this.elements.center.classTabs.innerHTML = "";
+        this.elements.left.classList.innerHTML = "";
+
+        Object.keys(this.classes).forEach((name) => {
+            const tab = document.createElement("li");
+            if (name == this.currentClass.name) tab.classList.add("on");
+            this.elements.center.classTabs.appendChild(tab);
+
+            const title = document.createElement("h5");
+            title.textContent = name;
+            tab.appendChild(title);
+
+            tab.addEventListener("click", () => {
+                if (this.currentClass.name == name) return;
+                this.openClass(name);
+                this.refreshClassInterfaces();
+                this.refreshMethodInterfaces();
+            });
+
+            const li = document.createElement("li");
+            this.elements.left.classList.appendChild(li);
+
+            const input = document.createElement("input");
+            input.value = name;
+            input.setAttribute("readonly", "readonly");
+            li.appendChild(input);
+
+            if (name != "Main") input.addEventListener("dblclick", () => {
+                input.removeAttribute("readonly");
+            });
+
+            const cross = document.createElement("button");
+            cross.textContent = "+";
+            if (name == "Main") cross.classList.add("disabled");
+            li.appendChild(cross);
+
+            if (name != "Main") cross.addEventListener("click", () => new Confirm(`Are you sure you wan to remove class "${name}"?`, [
+                { button: "Yes", call: () => {
+                    this.removeClass(name);
+                    this.success(`Successfully removed class "${name}"`);
+                }},
+                { button: "Cancel", call: null },
+            ]));
+        });
     }
 
-    getNextLinkUID(blueprint) {
-        for (let i = 0; i <= blueprint.links.length; i++) if (!blueprint.links.some(link => link.uid === i)) return i;
-        return 0;
-    }
+    refreshMethodInterfaces() {
+        this.elements.center.classMethodTabs.innerHTML = "";
+        this.elements.left.methodList.innerHTML = "";
+        this.elements.left.variableList.innerHTML = "";
 
-    getLinkerNbLinks(linker) {
-        const li = linker.parentElement;
-        const ul = li.parentElement;
-        const isParameter = ul.classList.contains("input-container");
-        const nodeUID = parseInt(ul.parentElement.id);
-        const index = [...ul.children].indexOf(li);
+        Object.keys(this.currentClass.methods).forEach((name) => {
+            const tab = document.createElement("li");
+            if (name == this.currentClass.currentMethod.name) tab.classList.add("on");
+            this.elements.center.classMethodTabs.appendChild(tab);
 
-        return this.currentBlueprint.links.reduce((acc, link) => {
-            const data = (isParameter) ? link.data.parameterNode : link.data.returnNode;
-            if (data.uid == nodeUID && data.index == index) return acc + 1;
-            else return acc;
-        }, 0);
+            const title = document.createElement("h5");
+            title.textContent = name;
+            tab.appendChild(title);
+
+            tab.addEventListener("click", () => {
+                this.currentClass.openMethod(name);
+                this.refreshMethodInterfaces();
+            });
+
+            const li = document.createElement("li");
+            this.elements.left.methodList.appendChild(li);
+
+            const input = document.createElement("input");
+            input.value = name;
+            input.setAttribute("readonly", "readonly");
+            li.appendChild(input);
+
+            if (name != "Constructor") input.addEventListener("dblclick", () => {
+                input.removeAttribute("readonly");
+            });
+
+            const cross = document.createElement("button");
+            cross.textContent = "+";
+            if (name == "Constructor") cross.classList.add("disabled");
+            li.appendChild(cross);
+
+            if (name != "Constructor") cross.addEventListener("click", () => new Confirm(`Are you sure you wan to remove method "${name}"?`, [
+                { button: "Yes", call: () => {
+                    this.currentClass.removeMethod(name);
+                    this.success(`Successfully removed method "${name}"`);
+                }},
+                { button: "Cancel", call: null },
+            ]));
+        });
     }
 };

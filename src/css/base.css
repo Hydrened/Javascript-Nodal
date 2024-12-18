@@ -2,7 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Helvetica;
+    font-family: var(--default-font);
     color: var(--font-col-1);
     overflow: hidden;
     user-select: none;

@@ -1,4 +1,4 @@
 section.center-container {
     display: grid;
-    grid-template-rows: var(--blueprint-tabs-nav-height) var(--blueprint-tabs-nav-height) 1fr;
+    grid-template-rows: var(--class-tabs-nav-height) var(--class-tabs-nav-height) 1fr;
 }

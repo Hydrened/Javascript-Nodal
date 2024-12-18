@@ -38,6 +38,29 @@
             }
         ]
     },
+    "11": {
+        "title": "If",
+        "parameters": [
+            {
+                "type": "execute",
+                "title": ""
+            },
+            {
+                "type": "variable",
+                "title": "Condition"
+            }
+        ],
+        "returns": [
+            {
+                "type": "execute",
+                "title": "True"
+            },
+            {
+                "type": "execute",
+                "title": "False"
+            }
+        ]
+    },
     "100": {
         "title": "Add",
         "parameters": [

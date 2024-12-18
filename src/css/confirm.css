@@ -1,0 +1,39 @@
+.anti-click {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 5000;
+}
+.anti-click > div {
+    width: 30rem;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    background-color: var(--bg-col-2);
+    border: 1px solid var(--bg-col-7);
+    border-radius: 0.7rem;
+}
+.anti-click > div > div {
+    display: flex;
+    gap: 0.5rem;
+}
+.anti-click > div > div > button {
+    padding: 0.4rem 0.7rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.9rem;
+    border-radius: 0.4rem;
+    background-color: var(--bg-col-7);
+    cursor: pointer;
+    transition: 100ms;
+}
+.anti-click > div > div > button:hover {
+    background-color: var(--bg-col-8);
+}

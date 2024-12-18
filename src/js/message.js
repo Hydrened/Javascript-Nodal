@@ -13,7 +13,7 @@ class Message {
         this.element.classList.add(this.type);
         setTimeout(() => this.element.classList.add("show"), 0);
         this.element.textContent = this.message;
-        this.app.elements.center.currentBlueprintContainer.appendChild(this.element);
+        this.app.elements.center.currentClassContainer.appendChild(this.element);
         
         this.element.addEventListener("click", () => this.destroy());
         setTimeout(() => this.destroy(), 5000);

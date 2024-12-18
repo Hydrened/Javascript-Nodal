@@ -8,7 +8,7 @@
     border-radius: 0.7rem;
     transform: translateX(-50%) translateY(-100%);
     cursor: pointer;
-    transition: transform 300ms, background-color 100ms;
+    transition: transform 300ms, background-color 100ms, opacity 1000ms;
     z-index: 30;
 }
 .message:hover {
@@ -22,4 +22,7 @@
 }
 .message.error {
     border-color: var(--font-col-error);
+}
+.message:not(:last-of-type) {
+    opacity: 0;
 }

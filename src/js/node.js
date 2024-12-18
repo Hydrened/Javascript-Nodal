@@ -1,25 +1,26 @@
 class Node {
-    constructor(app, blueprint, data, pos, id) {
+    constructor(app, c, method, data, pos, id) {
         this.app = app;
-        this.blueprint = blueprint;
+        this.class = c;
+        this.method = method;
         this.data = data;
         this.pos = pos;
         this.id = id;
-        this.uid = this.app.getNextNodeUID(blueprint);
+        this.uid = this.method.getNextNodeUID(this.class);
         this.displayed = false;
         this.element = null;
         this.snap();
     }
 
     show() {
-        if (!this.app.isCurrentBP(this.blueprint)) return;
+        if (!this.app.isCurrentBP(this.class)) return;
         this.displayed = true;
 
         const isFunction = this.data.parameters.concat(this.data.returns).filter((v) => v.type == "execute").length > 0;
 
         this.element = document.createElement("div");
         this.element.classList.add("node");
-        this.element.classList.add(isFunction ? "function" : "operation");
+        this.element.classList.add(isFunction ? "function" : "pure");
         this.updatePos();
         this.element.id = this.uid;
         this.app.elements.center.nodeContainer.appendChild(this.element);
@@ -59,7 +60,7 @@ class Node {
     }
 
     hide() {
-        if (!this.app.isCurrentBP(this.blueprint)) return;
+        if (!this.app.isCurrentBP(this.class)) return;
         this.element.remove();
         this.displayed = false;
     }

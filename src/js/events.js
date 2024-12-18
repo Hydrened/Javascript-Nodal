@@ -11,6 +11,7 @@ class Events {
         this.moveNode();
         this.contextMenu();
         this.removeNode();
+        this.leftInterface();
     }
 
     main() {
@@ -37,78 +38,52 @@ class Events {
             return { uid, index, isParameter };
         }
 
-        this.app.elements.center.currentBlueprintContainer.addEventListener("mousedown", (e) => {
+        this.app.elements.center.currentClassContainer.addEventListener("mousedown", (e) => {
             if (e.button != 0 || !e.target) return;
             if (!e.target.classList.contains("linker")) return;
 
             const linker = getLinkInfos(e.target);
-            if (linker.isParameter && e.target.classList.contains("linked")) return;
+            if (e.target.classList.contains("linked") && (linker.isParameter || e.target.classList.contains("execute"))) return;
+            
             this.linker1 = linker;
+            document.querySelector("div.current-class-grid-container").classList.add("linking");
         });
 
-        // this.app.elements.center.currentBlueprintContainer.addEventListener("click", (e) => {
-        //     if (e.button != 0 || !e.target) return;
-        //     if (!e.target.classList.contains("linker") || !e.target.classList.contains("linked")) return;
-        //     if (!this.keydown.includes("Alt")) return;
-
-        //     // const linker = getLinkInfos(e.target);
-        //     // console.log(linker);
-            
-
-        //     // this.app.currentBlueprint.links.forEach((link) => {
-        //     //     if (linker.isParameter) {
-        //     //         const nodes = this.app.currentBlueprint.nodes.filter((node) => node.uid == link.data.returnNode.uid);
-        //     //         nodes.forEach((node) => {
-        //     //             console.log(node);
-                        
-        //     //         });
-
-        //     //         // this.app.currentBlueprint.nodes.filter((node) => node.uid == link.data.returnNode.uid)[0].data.returns.foreach((ret) => {
-
-        //     //         // });
-        //     //     } else {
-
-        //     //     }
-        //     // });
-            
-
-        //     // this.app.currentBlueprint.removeLink();
-        // });
-
         document.addEventListener("mouseup", (e) => {
+            document.querySelector("div.current-class-grid-container").classList.remove("linking");
             if (e.button != 0 || !e.target) return;
             if (!this.linker1) return;
             if (!e.target.classList.contains("linker")) return;
 
             const linker1 = this.linker1;
             const linker2 = getLinkInfos(e.target);
-            if (linker2.isParameter && e.target.classList.contains("linked")) return;
+            if (e.target.classList.contains("linked") && (linker2.isParameter || e.target.classList.contains("execute"))) return;
             this.linker1 = null;
 
             if (linker1.isParameter == linker2.isParameter) return;
             const ret = (linker1.isParameter) ? linker2 : linker1;
             const param = (linker1.isParameter) ? linker1 : linker2;
 
-            const currentBlueprint = this.app.currentBlueprint;
-            const returnNode = currentBlueprint.nodes.filter((node) => node.uid == ret.uid)[0];
+            const currentMethod = this.app.currentClass.currentMethod;
+            const returnNode = currentMethod.nodes.filter((node) => node.uid == ret.uid)[0];
             const returnIndex = ret.index;
-            const parameterNode = currentBlueprint.nodes.filter((node) => node.uid == param.uid)[0];
+            const parameterNode = currentMethod.nodes.filter((node) => node.uid == param.uid)[0];
             const parameterIndex = param.index;
 
             if (returnNode.data.returns[returnIndex].type != parameterNode.data.parameters[parameterIndex].type) return;
-            currentBlueprint.linkNodes(returnNode, returnIndex, parameterNode, parameterIndex);
+            currentMethod.linkNodes(returnNode, returnIndex, parameterNode, parameterIndex);
         });
     }
 
     moveNode() {
-        this.app.elements.center.currentBlueprintContainer.addEventListener("mousedown", (e) => {
-            this.app.currentBlueprint.nodes.forEach((node) => node.element.classList.remove("focused"));
+        this.app.elements.center.currentClassContainer.addEventListener("mousedown", (e) => {
+            this.app.currentClass.currentMethod.nodes.forEach((node) => node.element.classList.remove("focused"));
 
             if (e.button != 0) return;
             if (e.target.tagName != "HEADER") return;
             if (!e.target.parentElement.classList.contains("node")) return;
 
-            const node = this.app.currentBlueprint.nodes.filter((node) => node.uid == e.target.parentElement.id)[0];
+            const node = this.app.currentClass.currentMethod.nodes.filter((node) => node.uid == e.target.parentElement.id)[0];
             node.element.classList.add("focused");
             const nodeRect = node.element.getBoundingClientRect();
             this.held = {
@@ -120,6 +95,11 @@ class Events {
             };
         });
 
+        this.app.elements.center.currentClassContainer.addEventListener("click", (e) => {
+            const node = [...this.app.elements.center.nodeContainer.children].filter((node) => node.contains(e.target))[0];
+            if (node) node.classList.add("focused");
+        });
+
         function updateNodePos(events, e, snap) {
             const cursorPos = events.app.getCursorPos(e);
             events.held.node.pos.x = cursorPos.x - events.held.offset.x;
@@ -128,24 +108,24 @@ class Events {
             if (snap) events.held.node.snap();
             events.held.node.updatePos();
 
-            events.app.getLinksByNodeUID(events.held.node.element.id).forEach((link) => link.hide());
-            events.app.currentBlueprint.refreshLinks();
+            events.app.currentClass.currentMethod.getLinksByNodeUID(events.held.node.element.id).forEach((link) => link.hide());
+            events.app.currentClass.currentMethod.refreshLinks();
         }
 
-        this.app.elements.center.currentBlueprintContainer.addEventListener("mouseup", (e) => {
+        this.app.elements.center.currentClassContainer.addEventListener("mouseup", (e) => {
             if (!this.held) return;
             updateNodePos(this, e, true);
             this.held = null;
         });
 
-        this.app.elements.center.currentBlueprintContainer.addEventListener("mousemove", (e) => {
+        this.app.elements.center.currentClassContainer.addEventListener("mousemove", (e) => {
             if (!this.held) return;
             updateNodePos(this, e, false);
         });
     }
 
     contextMenu() {
-        this.app.elements.center.currentBlueprintContainer.addEventListener("mouseup", (e) => {
+        this.app.elements.center.currentClassContainer.addEventListener("mouseup", (e) => {
             if (e.button != 2) return;
             if (this.app.grid.wasMoving) return;
             
@@ -168,8 +148,38 @@ class Events {
         window.addEventListener("keydown", (e) => {
             if (["Delete","Backspace"].includes(e.key)) {
                 const focusedNode = document.querySelector(".node.focused");
-                if (focusedNode) this.app.currentBlueprint.removeNode(focusedNode.id);
+                if (focusedNode) this.app.currentClass.currentMethod.removeNode(focusedNode.id);
             }
+        });
+    }
+
+    leftInterface() {
+        this.app.elements.left.classList.parentElement.querySelector(".details > button").addEventListener("click", () => {
+            const defaultNames = Object.keys(this.app.classes).filter((name) => name.includes("Class"));
+            if (defaultNames.includes("Class")) {
+                let i = 1;
+                while (true && i < 1000) {
+                    if (!defaultNames.includes(`Class ${i}`)) {
+                        this.app.createClass(`Class ${i}`);
+                        break;
+                    }
+                    i++;
+                }
+            } else this.app.createClass("Class");
+        });
+
+        this.app.elements.left.methodList.parentElement.querySelector(".details > button").addEventListener("click", () => {
+            const defaultNames = Object.keys(this.app.currentClass.methods).filter((name) => name.includes("Method"));
+            if (defaultNames.includes("Method")) {
+                let i = 1;
+                while (true && i < 1000) {
+                    if (!defaultNames.includes(`Method ${i}`)) {
+                        this.app.currentClass.createMethod(`Method ${i}`);
+                        break;
+                    }
+                    i++;
+                }
+            } else this.app.currentClass.createMethod("Method");
         });
     }
 };

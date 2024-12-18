@@ -5,16 +5,18 @@
     grid-template-columns: repeat(2, auto);
     column-gap: 0.5rem;
     background-color: rgba(0,0,0,0.6);
-    border: 1px solid black;
+    box-shadow: 0 0 0 1px black;
     border-radius: 0.6rem;
     font-size: 0.75rem;
     scale: 0;
     animation: fade-in-from-center 250ms ease-out forwards;
     transition: outline 50ms;
-    z-index: 20;
+    z-index: 2;
+    cursor: pointer;
 }
 .node.focused {
-    outline: 2px solid rgb(188, 140, 37);
+    outline: 3px solid rgb(188, 140, 37);
+    cursor: default;
 }
 
 
@@ -23,11 +25,12 @@
     padding: 0.4rem 0.6rem;
     font-weight: bold;
     grid-column: 1 / -1;
+    cursor: move;
 }
 .node.function > header {
     background-color: rgb(73, 73, 73);
 }
-.node.operation > header {
+.node.pure > header {
     background-color: black;
 }
 
@@ -65,14 +68,15 @@
     border-radius: 50%;
     background-color: black;
     overflow: visible;
+    cursor: crosshair;
 }
 .node > ul > li > .linker::after {
     content: "";
-    width: 30px;
+    width: 36px;
     aspect-ratio: 1 / 1;
     position: absolute;
-    top: -10px;
-    left: -10px;
+    top: -13px;
+    left: -13px;
 }
 .node > ul > li > .linker.execute {
     border: 2px solid var(--execute-color);
@@ -105,7 +109,7 @@
     border: 2px solid transparent;
     transform: translateY(-1px);
     opacity: 0.7;
-    z-index: 19;
+    z-index: 1;
 }
 .link.execute {
     border-color: var(--execute-color);

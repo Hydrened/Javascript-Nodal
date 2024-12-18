@@ -1,21 +1,22 @@
 class Link {
-    constructor(app, blueprint, data) {
+    constructor(app, c, method, data) {
         this.app = app;
-        this.blueprint = blueprint;
+        this.class = c;
+        this.method = method;
         this.data = data;
         this.displayed = false;
-        this.uid = this.app.getNextLinkUID(blueprint);
+        this.uid = this.method.getNextLinkUID();
         this.element = null;
         this.returnLink = null;
         this.parameterLink = null;
     }
 
     show() {
-        if (!this.app.isCurrentBP(this.blueprint)) return;
+        if (!this.app.isCurrentBP(this.class)) return;
         this.displayed = true;
 
-        const returnNode = this.blueprint.nodes.filter((node) => node.uid == this.data.returnNode.uid)[0];
-        const parameterNode = this.blueprint.nodes.filter((node) => node.uid == this.data.parameterNode.uid)[0];
+        const returnNode = this.method.nodes.filter((node) => node.uid == this.data.returnNode.uid)[0];
+        const parameterNode = this.method.nodes.filter((node) => node.uid == this.data.parameterNode.uid)[0];
 
         this.returnLink = returnNode.element.querySelector("ul.output-container").children[this.data.returnNode.index].querySelector("div.linker");
         this.parameterLink = parameterNode.element.querySelector("ul.input-container").children[this.data.parameterNode.index].querySelector("div.linker");
@@ -54,10 +55,10 @@ class Link {
     }
 
     hide() {
-        if (!this.app.isCurrentBP(this.blueprint)) return;
+        if (!this.app.isCurrentBP(this.class)) return;
         if (this.element) this.element.remove();
-        if (this.returnLink) if (this.app.getLinkerNbLinks(this.returnLink) == 0) this.returnLink.classList.remove("linked");
-        if (this.parameterLink) if (this.app.getLinkerNbLinks(this.parameterLink) == 0) this.parameterLink.classList.remove("linked");
+        if (this.returnLink) if (this.method.getLinkerNbLinks(this.returnLink) == 0) this.returnLink.classList.remove("linked");
+        if (this.parameterLink) if (this.method.getLinkerNbLinks(this.parameterLink) == 0) this.parameterLink.classList.remove("linked");
         this.displayed = false;
     }
 };

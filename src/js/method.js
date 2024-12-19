@@ -7,9 +7,9 @@ class Method {
         this.nodes = [];
         this.links = [];
 
-        setTimeout(() => {
-            this.createNode({ x: 0, y: 0 }, 0);
-        }, 0);
+        this.uid = this.class.getNextMethodUID();
+
+        setTimeout(() => this.createNode({ x: 0, y: 0 }, 0), 0);
     }
 
     open() {
@@ -94,12 +94,12 @@ class Method {
     }
 
     getNextNodeUID() {
-        for (let i = 0; i <= this.nodes.length; i++) if (!this.nodes.some(node => node.uid === i)) return i;
+        for (let i = 0; i <= this.nodes.length; i++) if (!this.nodes.some(node => node.uid == i)) return i;
         return this.nodes.length;
     }
 
     getNextLinkUID() {
-        for (let i = 0; i <= this.links.length; i++) if (!this.links.some(link => link.uid === i)) return i;
+        for (let i = 0; i <= this.links.length; i++) if (!this.links.some(link => link.uid == i)) return i;
         return 0;
     }
 

@@ -5,8 +5,8 @@ class Node {
         this.method = method;
         this.data = data;
         this.pos = pos;
-        this.id = id;
-        this.uid = this.method.getNextNodeUID(this.class);
+        this.id = Number(id);
+        this.uid = this.method.getNextNodeUID();
         this.displayed = false;
         this.element = null;
         this.snap();

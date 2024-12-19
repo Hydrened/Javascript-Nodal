@@ -65,9 +65,13 @@ class App {
 
     removeClass(name) {
         if (this.currentClass.name == name) this.openClass("Main");
-        Object.values(this.app.classes).forEach((c) => Object.entries(c.methods).forEach(([methodName, methodValue]) => {
-            if (methodName != name) methodValue.nodes.filter((n) => n.data.title == name).forEach((n) => methodValue.removeNode(n.uid));
-        }));
+        const methods = Object.keys(this.classes[name].methods);
+        const variables = Object.keys(this.classes[name].variables);
+
+        Object.values(this.classes).filter((c) => c.name != name).forEach((c) => Object.values(c.methods).forEach((method) => method.nodes.forEach((node) => {
+            if (node.data.from == name) method.removeNode(node.uid);
+        })));
+
         delete this.classes[name];
         this.refreshInterfaces();
     }
@@ -75,13 +79,15 @@ class App {
     renameClass(oldName, newName) {
         if (oldName == newName) return false;
         if (Object.keys(this.classes).includes(newName)) {
-            console.log(Object.keys(this.classes));
-            
             this.error(`Class named "${newName}" already exist`);
             return false;
         }
         this.classes[newName] = this.classes[oldName];
+        this.classes[newName].name = newName;
         delete this.classes[oldName];
+
+        Object.values(this.classes).forEach((c) => Object.values(c.methods).forEach((method) => Object.values(method.nodes).filter((node) => node.data.from == oldName).forEach((node) => node.data.from = newName)));
+
         this.refreshInterfaces();
         this.success(`Successfully renamed class "${oldName}" to "${newName}"`);
         return true;

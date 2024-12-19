@@ -1,3 +1,10 @@
+## HJN-1.0.7
+## FIXED
+- remove class variables and methods when removing a class
+- rename method calls when renaming a method
+- rename variable calls when renaming a variable
+- node apartenance when renaming a class
+
 ## HJN-1.0.6
 #### ADDED
 - rename class

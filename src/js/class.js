@@ -43,15 +43,21 @@ class Class {
             this.app.error(`Method named "${newName}" already exist`);
             return false;
         }
+
         this.methods[newName] = this.methods[oldName];
+        this.methods[newName].name = newName;
         delete this.methods[oldName];
+        
+        Object.values(this.app.classes).forEach((c) => Object.values(c.methods).forEach((method) => Object.values(method.nodes).filter((node) => node.data.title == oldName).forEach((node) => node.data.title = newName)));
+        this.openMethod(this.currentMethod.name, true);
+        
         this.app.refreshInterfaces();
         this.app.success(`Successfully renamed method "${oldName}" to "${newName}"`);
         return true;
     }
 
-    openMethod(name) {
-        if (this.currentMethod) if (name == this.currentMethod.name) return;
+    openMethod(name, force = false) {
+        if (!force) if (this.currentMethod) if (name == this.currentMethod.name) return;
         if (this.currentMethod) this.currentMethod.close();
         this.currentMethod = this.methods[name];
         this.currentMethod.open();
@@ -81,8 +87,18 @@ class Class {
         }
         this.variables[newName] = this.variables[oldName];
         delete this.variables[oldName];
+
+        Object.values(this.app.classes).forEach((c) => Object.values(c.methods).forEach((method) => Object.values(method.nodes).filter((node) => node.id >= 1000000 && node.data.from == this.name).forEach((node) => node.data.title = `${node.data.title.slice(0, 4)} ${newName}`)));
+        this.openMethod(this.currentMethod.name, true);
+
         this.app.refreshInterfaces();
         this.app.success(`Successfully renamed variable "${oldName}" to "${newName}"`);
         return true;
     }
-};
+
+    getNextMethodUID() {
+        const methods = Object.values(this.methods);
+        for (let i = 0; i <= methods.length; i++) if (!methods.some(method => method.uid == i)) return i;
+        return 0;
+    }
+}

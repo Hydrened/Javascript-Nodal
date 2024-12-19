@@ -30,15 +30,23 @@
     justify-content: space-between;
     align-items: center;
 }
+.left-container > article > ul > li.can-click {
+    cursor: pointer;
+}
 .left-container > article > ul > li > input {
     flex: 1;
     padding: 0.3rem 0.4rem;
     background-color: transparent;
     font-size: 0.8rem;
     border-radius: 0.3rem;
+    cursor: default;
+}
+.left-container > article > ul > li.can-click > input {
+    cursor: pointer;
 }
 .left-container > article > ul > li > input:not(:read-only) {
     background-color: var(--bg-col-2);
+    cursor: text;
 }
 .left-container > article > ul > li > button {
     display: flex;

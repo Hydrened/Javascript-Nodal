@@ -1,9 +1,23 @@
+## HJN-1.0.6
+#### ADDED
+- rename class
+- rename method
+- create variable
+- rename variable
+- remove variable
+## FIXED
+- contextmenu enter when only one node left
+- remove method calls when removing a method
+- remove variable calls when removing a variable
+
 ## HJN-1.0.5
 #### ADDED
 - class methods
 - class and method navigation
 - cursor for node, moving in grid, moving node, linkers
 - classes, methods and variables managment interface
+- create classes
+- create methods
 - remove class
 - remove method
 ## FIXED

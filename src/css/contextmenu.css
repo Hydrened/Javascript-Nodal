@@ -30,8 +30,14 @@
 }
 .contextmenu > ul > li {
     padding: 0.2rem 0.3rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
     cursor: pointer;
 }
 .contextmenu > ul > li:hover {
     background-color: var(--bg-col-7);
+}
+.contextmenu > ul > li > span {
+    color: var(--font-col-2);
 }

@@ -181,5 +181,19 @@ class Events {
                 }
             } else this.app.currentClass.createMethod("Method");
         });
+
+        this.app.elements.left.variableList.parentElement.querySelector(".details > button").addEventListener("click", () => {
+            const defaultNames = Object.keys(this.app.currentClass.variables).filter((name) => name.includes("Variable"));
+            if (defaultNames.includes("Variable")) {
+                let i = 1;
+                while (true && i < 1000) {
+                    if (!defaultNames.includes(`Variable ${i}`)) {
+                        this.app.currentClass.createVariable(`Variable ${i}`);
+                        break;
+                    }
+                    i++;
+                }
+            } else this.app.currentClass.createVariable("Variable");
+        });
     }
 };

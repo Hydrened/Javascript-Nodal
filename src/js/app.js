@@ -58,23 +58,182 @@ class App {
         if (!Object.keys(this.classes).includes(name)) {
             this.classes[name] = new Class(this, name);
             this.openClass(name);
-            this.refreshClassInterfaces();
-            this.refreshMethodInterfaces();
+            this.refreshInterfaces();
             if (name != "Main") this.success(`Successfully created class "${name}"`);
         } else this.error(`A class is already named "${name}"`);
     }
 
     removeClass(name) {
         if (this.currentClass.name == name) this.openClass("Main");
+        Object.values(this.app.classes).forEach((c) => Object.entries(c.methods).forEach(([methodName, methodValue]) => {
+            if (methodName != name) methodValue.nodes.filter((n) => n.data.title == name).forEach((n) => methodValue.removeNode(n.uid));
+        }));
         delete this.classes[name];
-        this.refreshClassInterfaces();
-        this.refreshMethodInterfaces();
+        this.refreshInterfaces();
+    }
+
+    renameClass(oldName, newName) {
+        if (oldName == newName) return false;
+        if (Object.keys(this.classes).includes(newName)) {
+            console.log(Object.keys(this.classes));
+            
+            this.error(`Class named "${newName}" already exist`);
+            return false;
+        }
+        this.classes[newName] = this.classes[oldName];
+        delete this.classes[oldName];
+        this.refreshInterfaces();
+        this.success(`Successfully renamed class "${oldName}" to "${newName}"`);
+        return true;
     }
 
     openClass(name) {
+        if (this.currentClass) if (this.currentClass.name == name) return;
         if (this.currentClass) this.currentClass.close();
         this.currentClass = this.classes[name];
         this.currentClass.open();
+    }
+
+    refreshInterfaces() {
+        this.elements.center.classTabs.innerHTML = "";
+        this.elements.left.classList.innerHTML = "";
+        this.elements.center.classMethodTabs.innerHTML = "";
+        this.elements.left.methodList.innerHTML = "";
+        this.elements.left.variableList.innerHTML = "";
+
+        function refreshTabs(app, { titles, exception, parent, calls: { click } }) {
+            titles.forEach((name) => {
+                const li = document.createElement("li");
+                if (name == exception) li.classList.add("on");
+                parent.appendChild(li);
+    
+                const title = document.createElement("h5");
+                title.textContent = name;
+                li.appendChild(title);
+    
+                li.addEventListener("click", () => {
+                    if (exception == name) return;
+                    click(name);
+                    app.refreshInterfaces();
+                });
+            });
+        }
+        refreshTabs(this, {
+            titles: Object.keys(this.classes),
+            exception: this.currentClass.name,
+            parent: this.elements.center.classTabs,
+            calls: {
+                click: (name) => this.openClass(name),
+            },
+        });
+        refreshTabs(this, {
+            titles: Object.keys(this.currentClass.methods),
+            exception: this.currentClass.currentMethod.name,
+            parent: this.elements.center.classMethodTabs,
+            calls: {
+                click: (name) => this.currentClass.openMethod(name),
+            },
+        });
+
+        function refreshLeft(app, { titles, exception, parent, calls: { rename, open, confirmRemove } }) {
+            titles.forEach((name) => {
+                const li = document.createElement("li");
+                if (open && name != exception) li.classList.add("can-click");
+                parent.appendChild(li);
+    
+                const input = document.createElement("input");
+                input.value = name;
+                input.setAttribute("readonly", "readonly");
+                li.appendChild(input);
+    
+                let clickTimeout = null;
+                if (name != exception) input.addEventListener("dblclick", () => {
+                    clearTimeout(clickTimeout);
+                    clickTimeout = null;
+                    input.removeAttribute("readonly");
+                    input.select();
+                });
+
+                if (name != exception) input.addEventListener("keydown", (e) => { if (e.key == "Enter") input.blur(); });
+                if (name != exception) input.addEventListener("blur", () => {
+                    const oldName = titles[[...parent.children].map((li) => li.querySelector("input:not(:read-only)")).indexOf(input)];
+                    input.setAttribute("readonly", "readonly");
+                    if (rename) if (!rename(oldName, input.value)) input.value = oldName;
+                });
+
+                li.addEventListener("click", () => {
+                    if (clickTimeout) return;
+                    clickTimeout = setTimeout(() => {
+                        clickTimeout = null;
+                        // if (open) open(name);
+                    }, 250);
+                });
+    
+                const cross = document.createElement("button");
+                cross.textContent = "+";
+                if (name == exception) cross.classList.add("disabled");
+                li.appendChild(cross);
+    
+                if (name != exception) cross.addEventListener("click", () => new Confirm(confirmRemove.message(name), confirmRemove.options(name)));
+            });
+        }
+        refreshLeft(this, {
+            titles: Object.keys(this.classes),
+            exception: "Main",
+            parent: this.elements.left.classList,
+            calls: {
+                rename: (oldName, newName) => this.renameClass(oldName, newName),
+                open: (name) => this.openClass(name),
+                confirmRemove: {
+                    message: (name) => `Are you sure you wan to remove class "${name}"?`,
+                    options: (name) => [
+                        { button: "Yes", call: () => {
+                            this.removeClass(name);
+                            this.success(`Successfully removed class "${name}"`);
+                        }},
+                        { button: "Cancel", call: null },
+                    ],
+                }
+            },
+        });
+        refreshLeft(this, {
+            titles: Object.keys(this.currentClass.methods),
+            exception: "Constructor",
+            parent: this.elements.left.methodList,
+            calls: {
+                rename: (oldName, newName) => this.currentClass.renameMethod(oldName, newName),
+                open: (name) => this.currentClass.openMethod(name),
+                confirmRemove: {
+                    message: (name) => `Are you sure you wan to remove method "${name}"?`,
+                    options: (name) => [
+                        { button: "Yes", call: () => {
+                            this.currentClass.removeMethod(name);
+                            this.success(`Successfully removed method "${name}"`);
+                        }},
+                        { button: "Cancel", call: null },
+                    ],
+                }
+            },
+        });
+        refreshLeft(this, {
+            titles: Object.keys(this.currentClass.variables),
+            exception: null,
+            parent: this.elements.left.variableList,
+            calls: {
+                rename: (oldName, newName) => this.currentClass.renameVariable(oldName, newName),
+                open: null,
+                confirmRemove: {
+                    message: (name) => `Are you sure you wan to remove variable "${name}"?`,
+                    options: (name) => [
+                        { button: "Yes", call: () => {
+                            this.currentClass.removeVariable(name);
+                            this.success(`Successfully removed variable "${name}"`);
+                        }},
+                        { button: "Cancel", call: null },
+                    ],
+                }
+            },
+        });
     }
 
     isCurrentBP(bp) {
@@ -96,98 +255,5 @@ class App {
     destroyContextMenu() {
         this.events.ctxMenu.destroy();
         this.events.ctxMenu = null;
-    }
-
-    refreshClassInterfaces() {
-        this.elements.center.classTabs.innerHTML = "";
-        this.elements.left.classList.innerHTML = "";
-
-        Object.keys(this.classes).forEach((name) => {
-            const tab = document.createElement("li");
-            if (name == this.currentClass.name) tab.classList.add("on");
-            this.elements.center.classTabs.appendChild(tab);
-
-            const title = document.createElement("h5");
-            title.textContent = name;
-            tab.appendChild(title);
-
-            tab.addEventListener("click", () => {
-                if (this.currentClass.name == name) return;
-                this.openClass(name);
-                this.refreshClassInterfaces();
-                this.refreshMethodInterfaces();
-            });
-
-            const li = document.createElement("li");
-            this.elements.left.classList.appendChild(li);
-
-            const input = document.createElement("input");
-            input.value = name;
-            input.setAttribute("readonly", "readonly");
-            li.appendChild(input);
-
-            if (name != "Main") input.addEventListener("dblclick", () => {
-                input.removeAttribute("readonly");
-            });
-
-            const cross = document.createElement("button");
-            cross.textContent = "+";
-            if (name == "Main") cross.classList.add("disabled");
-            li.appendChild(cross);
-
-            if (name != "Main") cross.addEventListener("click", () => new Confirm(`Are you sure you wan to remove class "${name}"?`, [
-                { button: "Yes", call: () => {
-                    this.removeClass(name);
-                    this.success(`Successfully removed class "${name}"`);
-                }},
-                { button: "Cancel", call: null },
-            ]));
-        });
-    }
-
-    refreshMethodInterfaces() {
-        this.elements.center.classMethodTabs.innerHTML = "";
-        this.elements.left.methodList.innerHTML = "";
-        this.elements.left.variableList.innerHTML = "";
-
-        Object.keys(this.currentClass.methods).forEach((name) => {
-            const tab = document.createElement("li");
-            if (name == this.currentClass.currentMethod.name) tab.classList.add("on");
-            this.elements.center.classMethodTabs.appendChild(tab);
-
-            const title = document.createElement("h5");
-            title.textContent = name;
-            tab.appendChild(title);
-
-            tab.addEventListener("click", () => {
-                this.currentClass.openMethod(name);
-                this.refreshMethodInterfaces();
-            });
-
-            const li = document.createElement("li");
-            this.elements.left.methodList.appendChild(li);
-
-            const input = document.createElement("input");
-            input.value = name;
-            input.setAttribute("readonly", "readonly");
-            li.appendChild(input);
-
-            if (name != "Constructor") input.addEventListener("dblclick", () => {
-                input.removeAttribute("readonly");
-            });
-
-            const cross = document.createElement("button");
-            cross.textContent = "+";
-            if (name == "Constructor") cross.classList.add("disabled");
-            li.appendChild(cross);
-
-            if (name != "Constructor") cross.addEventListener("click", () => new Confirm(`Are you sure you wan to remove method "${name}"?`, [
-                { button: "Yes", call: () => {
-                    this.currentClass.removeMethod(name);
-                    this.success(`Successfully removed method "${name}"`);
-                }},
-                { button: "Cancel", call: null },
-            ]));
-        });
     }
 };

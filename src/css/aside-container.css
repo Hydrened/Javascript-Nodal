@@ -1,0 +1,100 @@
+.aside-container {
+    padding: 1rem calc(1rem - var(--scroll-width)) 1rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    overflow-y: scroll;
+}
+
+
+
+.aside-container > article {
+    border-radius: 0.3rem;
+    background-color: var(--bg-col-6);
+}
+
+
+
+.aside-container > article div.details {
+    padding-inline: 0.5rem 0.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 0.3rem;
+}
+.aside-container > article > div.details {
+    height: 30px;
+    background-color: var(--bg-col-1);
+    font-size: 0.75rem;
+}
+.aside-container > article > ul > li > div.details {
+    height: 26px;
+    background-color: var(--bg-col-2);
+    font-size: 0.65rem;
+}
+.aside-container > article div.details h3 {
+    font-weight: bold;
+}
+.aside-container > article button {
+    width: 20px;
+    aspect-ratio: 1 / 1;
+    font-size: 1.2rem !important;
+    border-radius: 50%;
+    cursor: pointer;
+}
+.aside-container > article button.disabled {
+    color: transparent;
+    pointer-events: none;
+}
+.aside-container > article button.cross {
+    transform: rotate(45deg);
+}
+
+
+
+.aside-container > article ul {
+    display: flex;
+    flex-direction: column;
+}
+.aside-container > article ul > li:not(:has(div.details)) {
+    height: 26px;
+    display: flex;
+    align-items: center;
+}
+.aside-container > article ul > li:not(:has(div.details)) * {
+    font-size: 0.75rem;
+}
+.aside-container > article ul > li:not(:has(div.details)).can-click {
+    cursor: pointer;
+}
+
+
+
+.aside-container > article input:not([type="checkbox"]) {
+    padding: 0.15rem 0.25rem;
+    border-radius: 0.3rem;
+    transition: 100ms;
+    border: 1px solid transparent;
+}
+.aside-container > article input:focus:not(:read-only) {
+    border-color: var(--col-1);
+}
+.aside-container > article ul > li:not(:has(div.details)):has(p):has(input) {
+    padding-inline: 0.5rem 0.3rem;
+    gap: 0.5rem;
+}
+.aside-container > article ul > li:not(:has(div.details)):has(input):has(button) {
+    padding-inline: 0.25rem;
+    gap: 0.2rem;
+}
+.aside-container > article ul > li:not(:has(div.details)):has(p):has(input) > input:not([type="checkbox"]),
+.aside-container > article ul > li:not(:has(div.details)):has(input):has(button) > input {
+    flex: 1;
+    background-color: var(--bg-col-7);
+}
+.aside-container > article ul > li:not(:has(div.details)) input:read-only {
+    background-color: transparent;
+}
+.aside-container > article ul > li:not(:has(div.details)):has(button.disabled) > input:read-only {
+    cursor: default;
+}

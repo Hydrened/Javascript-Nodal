@@ -6,9 +6,11 @@ class App {
 
         this.elements = {
             left: {
+                currentClass: document.getElementById("current-class-title"),
                 classList: document.getElementById("class-list-container"),
                 methodList: document.getElementById("method-list-container"),
                 variableList: document.getElementById("variable-list-container"),
+                localVariableList: document.getElementById("local-variable-list-container"),
             },
             center: {
                 classTabs: document.getElementById("classes-tabs"),
@@ -28,6 +30,7 @@ class App {
         this.initData().then(() => {
             this.events = new Events(this);
             this.grid = new Grid(this);
+            this.interface = new Interface(this);
             this.createClass("Main");
         });
     }
@@ -69,7 +72,7 @@ class App {
         const variables = Object.keys(this.classes[name].variables);
 
         Object.values(this.classes).filter((c) => c.name != name).forEach((c) => Object.values(c.methods).forEach((method) => method.nodes.forEach((node) => {
-            if (node.data.from == name) method.removeNode(node.uid);
+            if (node.data.from == name && node.data.type == "new instance") method.removeNode(node.uid);
         })));
 
         delete this.classes[name];
@@ -77,7 +80,7 @@ class App {
     }
 
     renameClass(oldName, newName) {
-        if (oldName == newName) return false;
+        if (oldName == newName || newName == "") return false;
         if (Object.keys(this.classes).includes(newName)) {
             this.error(`Class named "${newName}" already exist`);
             return false;
@@ -86,7 +89,11 @@ class App {
         this.classes[newName].name = newName;
         delete this.classes[oldName];
 
-        Object.values(this.classes).forEach((c) => Object.values(c.methods).forEach((method) => Object.values(method.nodes).filter((node) => node.data.from == oldName).forEach((node) => node.data.from = newName)));
+        Object.values(this.classes).forEach((c) => Object.values(c.methods).forEach((method) => {
+            Object.values(method.nodes).filter((node) => node.data.from == oldName).forEach((node) => node.data.from = newName);
+            Object.values(method.nodes).filter((node) => node.data.type == "new instance").forEach((node) => node.data.title = `New ${newName} instance`);
+        }));
+        this.currentClass.openMethod(this.currentClass.currentMethod.name, true);
 
         this.refreshInterfaces();
         this.success(`Successfully renamed class "${oldName}" to "${newName}"`);
@@ -101,145 +108,7 @@ class App {
     }
 
     refreshInterfaces() {
-        this.elements.center.classTabs.innerHTML = "";
-        this.elements.left.classList.innerHTML = "";
-        this.elements.center.classMethodTabs.innerHTML = "";
-        this.elements.left.methodList.innerHTML = "";
-        this.elements.left.variableList.innerHTML = "";
-
-        function refreshTabs(app, { titles, exception, parent, calls: { click } }) {
-            titles.forEach((name) => {
-                const li = document.createElement("li");
-                if (name == exception) li.classList.add("on");
-                parent.appendChild(li);
-    
-                const title = document.createElement("h5");
-                title.textContent = name;
-                li.appendChild(title);
-    
-                li.addEventListener("click", () => {
-                    if (exception == name) return;
-                    click(name);
-                    app.refreshInterfaces();
-                });
-            });
-        }
-        refreshTabs(this, {
-            titles: Object.keys(this.classes),
-            exception: this.currentClass.name,
-            parent: this.elements.center.classTabs,
-            calls: {
-                click: (name) => this.openClass(name),
-            },
-        });
-        refreshTabs(this, {
-            titles: Object.keys(this.currentClass.methods),
-            exception: this.currentClass.currentMethod.name,
-            parent: this.elements.center.classMethodTabs,
-            calls: {
-                click: (name) => this.currentClass.openMethod(name),
-            },
-        });
-
-        function refreshLeft(app, { titles, exception, parent, calls: { rename, open, confirmRemove } }) {
-            titles.forEach((name) => {
-                const li = document.createElement("li");
-                if (open && name != exception) li.classList.add("can-click");
-                parent.appendChild(li);
-    
-                const input = document.createElement("input");
-                input.value = name;
-                input.setAttribute("readonly", "readonly");
-                li.appendChild(input);
-    
-                let clickTimeout = null;
-                if (name != exception) input.addEventListener("dblclick", () => {
-                    clearTimeout(clickTimeout);
-                    clickTimeout = null;
-                    input.removeAttribute("readonly");
-                    input.select();
-                });
-
-                if (name != exception) input.addEventListener("keydown", (e) => { if (e.key == "Enter") input.blur(); });
-                if (name != exception) input.addEventListener("blur", () => {
-                    const oldName = titles[[...parent.children].map((li) => li.querySelector("input:not(:read-only)")).indexOf(input)];
-                    input.setAttribute("readonly", "readonly");
-                    if (rename) if (!rename(oldName, input.value)) input.value = oldName;
-                });
-
-                li.addEventListener("click", () => {
-                    if (clickTimeout) return;
-                    clickTimeout = setTimeout(() => {
-                        clickTimeout = null;
-                        // if (open) open(name);
-                    }, 250);
-                });
-    
-                const cross = document.createElement("button");
-                cross.textContent = "+";
-                if (name == exception) cross.classList.add("disabled");
-                li.appendChild(cross);
-    
-                if (name != exception) cross.addEventListener("click", () => new Confirm(confirmRemove.message(name), confirmRemove.options(name)));
-            });
-        }
-        refreshLeft(this, {
-            titles: Object.keys(this.classes),
-            exception: "Main",
-            parent: this.elements.left.classList,
-            calls: {
-                rename: (oldName, newName) => this.renameClass(oldName, newName),
-                open: (name) => this.openClass(name),
-                confirmRemove: {
-                    message: (name) => `Are you sure you wan to remove class "${name}"?`,
-                    options: (name) => [
-                        { button: "Yes", call: () => {
-                            this.removeClass(name);
-                            this.success(`Successfully removed class "${name}"`);
-                        }},
-                        { button: "Cancel", call: null },
-                    ],
-                }
-            },
-        });
-        refreshLeft(this, {
-            titles: Object.keys(this.currentClass.methods),
-            exception: "Constructor",
-            parent: this.elements.left.methodList,
-            calls: {
-                rename: (oldName, newName) => this.currentClass.renameMethod(oldName, newName),
-                open: (name) => this.currentClass.openMethod(name),
-                confirmRemove: {
-                    message: (name) => `Are you sure you wan to remove method "${name}"?`,
-                    options: (name) => [
-                        { button: "Yes", call: () => {
-                            this.currentClass.removeMethod(name);
-                            this.success(`Successfully removed method "${name}"`);
-                        }},
-                        { button: "Cancel", call: null },
-                    ],
-                }
-            },
-        });
-        refreshLeft(this, {
-            titles: Object.keys(this.currentClass.variables),
-            exception: null,
-            parent: this.elements.left.variableList,
-            calls: {
-                rename: (oldName, newName) => this.currentClass.renameVariable(oldName, newName),
-                open: null,
-                confirmRemove: {
-                    message: (name) => `Are you sure you wan to remove variable "${name}"?`,
-                    options: (name) => [
-                        { button: "Yes", call: () => {
-                            this.currentClass.removeVariable(name);
-                            this.success(`Successfully removed variable "${name}"`);
-                        }},
-                        { button: "Cancel", call: null },
-                    ],
-                }
-            },
-        });
+        this.interface.refresh();
     }
 
     isCurrentBP(bp) {

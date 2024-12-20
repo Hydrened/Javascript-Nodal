@@ -1,5 +1,5 @@
 .contextmenu {
-    width: 15rem;
+    width: 17rem;
     padding: 0.5rem;
     position: absolute;
     display: flex;
@@ -34,10 +34,12 @@
     align-items: center;
     gap: 0.4rem;
     cursor: pointer;
+    white-space: nowrap;
 }
 .contextmenu > ul > li:hover {
     background-color: var(--bg-col-7);
 }
 .contextmenu > ul > li > span {
     color: var(--font-col-2);
+    white-space: nowrap;
 }

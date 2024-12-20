@@ -6,6 +6,7 @@ class Method {
 
         this.nodes = [];
         this.links = [];
+        this.localVariables = {};
 
         this.uid = this.class.getNextMethodUID();
 
@@ -23,6 +24,39 @@ class Method {
     close() {
         this.nodes.forEach((node) => node.hide());
         this.links.forEach((link) => link.hide());
+    }
+
+    createLocalVariable(name) {
+        if (!Object.keys(this.localVariables).includes(name)) {
+            this.localVariables[name] = undefined;
+            this.app.success(`Successfully created local variable "${name}"`);
+            setTimeout(() => this.app.refreshInterfaces(), 0);
+        } else this.app.error(`A local variable is already named "${name}"`);
+    }
+
+    removeLocalVariable(name) {
+        Object.values(this.app.classes).forEach((c) => Object.entries(c.methods).forEach(([methodName, methodValue]) => {
+            methodValue.nodes.filter((n) => (n.data.title == `Get ${name}` || n.data.title == `Set ${name}`) && n.data.type == "local variable").forEach((n) => methodValue.removeNode(n.uid));
+        }));
+        delete this.localVariables[name];
+        this.app.refreshInterfaces();
+    }
+
+    renameLocalVariable(oldName, newName) {
+        if (oldName == newName || newName == "") return false;
+        if (Object.keys(this.localVariables).includes(newName)) {
+            this.app.error(`Local variable named "${newName}" already exist`);
+            return false;
+        }
+        this.localVariables[newName] = this.localVariables[oldName];
+        delete this.localVariables[oldName];
+
+        Object.values(this.app.classes).forEach((c) => Object.values(c.methods).forEach((method) => Object.values(method.nodes).filter((node) => (node.data.title == `Get ${oldName}` || node.data.title == `Set ${oldName}`) && node.data.type == "local variable" && node.data.from == this.name).forEach((node) => node.data.title = `${node.data.title.slice(0, 4)} ${newName}`)));
+        this.app.currentClass.openMethod(this.name, true);
+
+        this.app.refreshInterfaces();
+        this.app.success(`Successfully renamed local variable "${oldName}" to "${newName}"`);
+        return true;
     }
 
     createNode(pos, id, data) {

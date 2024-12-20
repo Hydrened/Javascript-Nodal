@@ -195,5 +195,19 @@ class Events {
                 }
             } else this.app.currentClass.createVariable("Variable");
         });
+
+        this.app.elements.left.localVariableList.parentElement.querySelector(".details > button").addEventListener("click", () => {
+            const defaultNames = Object.keys(this.app.currentClass.currentMethod.localVariables).filter((name) => name.includes("Local variable"));
+            if (defaultNames.includes("Local variable")) {
+                let i = 1;
+                while (true && i < 1000) {
+                    if (!defaultNames.includes(`Local variable ${i}`)) {
+                        this.app.currentClass.currentMethod.createLocalVariable(`Local variable ${i}`);
+                        break;
+                    }
+                    i++;
+                }
+            } else this.app.currentClass.currentMethod.createLocalVariable("Local variable");
+        });
     }
 };

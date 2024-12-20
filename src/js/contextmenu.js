@@ -58,12 +58,14 @@ class ContextMenu {
     }
 
     getAllNodes() {
+        const classes = [];
         const methods = [];
         const variables = [];
+        const localVariables = [];
 
-        function getNextId(ctx, methods, variables) {
+        function getNextId(ctx, classes, methods, variables, localVariables) {
             const min = 1000000;
-            const ids = Object.keys(ctx.app.nodes).concat(methods.map((m) => m[0])).concat(variables.map((v) => v[0])).map((id) => Number(id)).filter((id) => id >= min);
+            const ids = Object.keys(ctx.app.nodes).concat(classes.map((c) => c[0])).concat(methods.map((m) => m[0])).concat(variables.map((v) => v[0])).concat(localVariables.map((v) => v[0])).map((id) => Number(id)).filter((id) => id >= min);
             if (ids.length != 0) {
                 const seen = new Set();
                 for (const num of ids) if (num > min) seen.add(num);
@@ -76,11 +78,50 @@ class ContextMenu {
         }
 
         Object.entries(this.app.classes).forEach(([className, classValue]) => {
-            Object.keys(classValue.methods).forEach((name) => {
-                if (name == "Constructor") return;
-                methods.push([getNextId(this, methods, variables), {
-                    title: name,
+            if (className != "Main") classes.push([getNextId(this, classes, methods, variables, localVariables), {
+                title: `New ${className} instance`,
+                from: className,
+                type: "new instance",
+                parameters: [
+                    { type: "execute", title: "" },
+                ],
+                returns: [
+                    { type: "execute", title: "" },
+                    { type: "variable", title: "Instance" },
+                ],
+            }]);
+
+            Object.entries(classValue.methods).forEach(([methodName, methodValue]) => {
+                if (this.app.currentClass.currentMethod.name == methodName && this.app.currentClass.name == className) Object.keys(methodValue.localVariables).forEach((localVariableName) => {
+                    localVariables.push([getNextId(this, classes, methods, variables, localVariables), {
+                        title: `Get ${localVariableName}`,
+                        from: methodName,
+                        type: "local variable",
+                        parameters: [],
+                        returns: [
+                            { type: "variable", title: localVariableName },
+                        ],
+                    }]);
+                    localVariables.push([getNextId(this, classes, methods, variables, localVariables), {
+                        title: `Set ${localVariableName}`,
+                        from: methodName,
+                        type: "local variable",
+                        parameters: [
+                            { type: "execute", title: "" },
+                            { type: "variable", title: "" },
+                        ],
+                        returns: [
+                            { type: "execute", title: "" },
+                            { type: "variable", title: localVariableName },
+                        ],
+                    }]);
+                });
+
+                if (methodName == "Constructor") return;
+                methods.push([getNextId(this, classes, methods, variables, localVariables), {
+                    title: methodName,
                     from: className,
+                    type: "method",
                     parameters: [
                         { type: "execute", title: "" },
                     ],
@@ -89,31 +130,33 @@ class ContextMenu {
                     ],
                 }]);
             });
-            Object.keys(classValue.variables).forEach((name) => {
-                variables.push([getNextId(this, methods, variables), {
-                    title: `Get ${name}`,
+            Object.keys(classValue.variables).forEach((variableName) => {
+                variables.push([getNextId(this, classes, methods, variables, localVariables), {
+                    title: `Get ${variableName}`,
                     from: className,
+                    type: "variable",
                     parameters: [],
                     returns: [
-                        { type: "variable", title: name },
+                        { type: "variable", title: variableName },
                     ],
                 }]);
-                variables.push([getNextId(this, methods, variables), {
-                    title: `Set ${name}`,
+                variables.push([getNextId(this, classes, methods, variables, localVariables), {
+                    title: `Set ${variableName}`,
                     from: className,
+                    type: "variable",
                     parameters: [
                         { type: "execute", title: "" },
                         { type: "variable", title: "" },
                     ],
                     returns: [
                         { type: "execute", title: "" },
-                        { type: "variable", title: name },
+                        { type: "variable", title: variableName },
                     ],
                 }]);
             });
         });
 
-        return Object.entries(this.app.nodes).concat(methods).concat(variables);
+        return Object.entries(this.app.nodes).concat(classes).concat(methods).concat(variables).concat(localVariables);
     }
 
     destroy() {

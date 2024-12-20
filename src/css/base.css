@@ -35,7 +35,7 @@ input {
     background-color: rgba(0,0,0,0.8);
 }
 input {
-    accent-color: var(--bg-col-6);
+    accent-color: var(--col-1);
 }
 
 
@@ -74,7 +74,7 @@ svg.fill.main-color-hover:hover, svg.fill.main-color-hover:hover * {
     width: var(--scroll-width);
 }
 ::-webkit-scrollbar-track {
-    background: var(--bg-col-7);
+    background: transparent;
     border-radius: calc(var(--scroll-width) / 2);
 }
 ::-webkit-scrollbar-thumb {
@@ -97,9 +97,13 @@ svg.fill.main-color-hover:hover, svg.fill.main-color-hover:hover * {
 div.page {
     height: calc(100vh - var(--frame-height));
     display: grid;
-    grid-template-columns: var(--left-container-width) var(--center-container-width) var(--right-container-width);
+    grid-template-rows: var(--header-height) 1fr;
+    grid-template-columns: var(--aside-container-width) var(--center-container-width) var(--aside-container-width);
 }
-div.page > section.left-container,
-div.page > section.right-container {
+div.page > section.aside-container {
     background-color: var(--bg-col-4);
+}
+div.page > header {
+    background-color: var(--col-1);
+    grid-column: 1 / 4;
 }

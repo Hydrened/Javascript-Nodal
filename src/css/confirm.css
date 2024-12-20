@@ -10,7 +10,7 @@
     z-index: 5000;
 }
 .anti-click > div {
-    width: 30rem;
+    width: 35rem;
     padding: 1rem;
     display: flex;
     flex-direction: column;

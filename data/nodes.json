@@ -2,6 +2,7 @@
     "0": {
         "title": "Begin",
         "from": "",
+        "type": "function",
         "parameters": [],
         "returns": [
             {
@@ -13,6 +14,7 @@
     "1": {
         "title": "Return",
         "from": "",
+        "type": "function",
         "parameters": [
             {
                 "type": "execute",
@@ -24,6 +26,7 @@
     "10": {
         "title": "Console Log",
         "from": "",
+        "type": "function",
         "parameters": [
             {
                 "type": "execute",
@@ -44,6 +47,7 @@
     "11": {
         "title": "If",
         "from": "",
+        "type": "function",
         "parameters": [
             {
                 "type": "execute",
@@ -65,9 +69,43 @@
             }
         ]
     },
+    "12": {
+        "title": "For",
+        "from": "",
+        "type": "function",
+        "parameters": [
+            {
+                "type": "execute",
+                "title": ""
+            },
+            {
+                "type": "variable",
+                "title": "start"
+            },
+            {
+                "type": "variable",
+                "title": "end"
+            }
+        ],
+        "returns": [
+            {
+                "type": "execute",
+                "title": "Loop"
+            },
+            {
+                "type": "variable",
+                "title": "index"
+            },
+            {
+                "type": "execute",
+                "title": "Completed"
+            }
+        ]
+    },
     "100": {
         "title": "Add",
         "from": "",
+        "type": "function",
         "parameters": [
             {
                 "type": "variable",
@@ -82,6 +120,27 @@
             {
                 "type": "variable",
                 "title": "Result"
+            }
+        ]
+    },
+    "101": {
+        "title": "Is equal",
+        "from": "",
+        "type": "function",
+        "parameters": [
+            {
+                "type": "variable",
+                "title": "Value 1"
+            },
+            {
+                "type": "variable",
+                "title": "Value 2"
+            }
+        ],
+        "returns": [
+            {
+                "type": "variable",
+                "title": "Is equal"
             }
         ]
     }

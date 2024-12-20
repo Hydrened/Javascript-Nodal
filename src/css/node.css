@@ -10,13 +10,16 @@
     font-size: 0.75rem;
     scale: 0;
     animation: fade-in-from-center 250ms ease-out forwards;
-    transition: outline 50ms;
+    transition: outline 50ms, opacity 300ms;
     z-index: 2;
     cursor: pointer;
 }
 .node.focused {
-    outline: 3px solid rgb(188, 140, 37);
+    outline: 3px solid var(--col-1);
     cursor: default;
+}
+#node-container:has(.link:hover) > .node {
+    opacity: 0.3;
 }
 
 
@@ -107,8 +110,9 @@
 .link {
     position: absolute;
     border: 2px solid transparent;
+    border-radius: 2px;
     transform: translateY(-1px);
-    opacity: 0.7;
+    opacity: 0.6;
     z-index: 1;
 }
 .link.execute {
@@ -119,3 +123,11 @@
     border-color: var(--variable-color);
     background-color: var(--variable-color);
 }
+#node-container:has(.link:hover) > .link:not(:hover) {
+    opacity: 0.1;
+}
+.link:hover {
+    opacity: 1;
+    z-index: 10;
+}
+

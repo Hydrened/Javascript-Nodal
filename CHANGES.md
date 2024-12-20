@@ -1,3 +1,16 @@
+## HJN-1.0.8
+#### ADDED
+- new class instance node
+- class settings interface
+- method settings interface
+- descrease nodes and links opacity when hovering a link
+- local varaibles for methods
+## FIXED
+- renaming possibilities
+- class / method / variable detection
+- renaming events in left interface
+- variable renaming
+
 ## HJN-1.0.7
 ## FIXED
 - remove class variables and methods when removing a class

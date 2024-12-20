@@ -15,7 +15,7 @@
     --font-col-success: rgb(74,222,74);
     --font-col-error: rgb(236,64,64);
 
-    --col-1: rgb(31,114,198);
+    --col-1: rgb(188, 140, 37);
 
     --default-font: "Helvetica";
     --class-font: "typo draft";
@@ -25,9 +25,9 @@
 
     --scroll-width: 8px;
     --frame-height: 36px;
-    --left-container-width: minmax(300px, 20vw);
+    --header-height: 18px;
+    --aside-container-width: minmax(300px, 20vw);
     --center-container-width: 1fr;
-    --right-container-width: minmax(300px, 20vw);
     --class-tabs-nav-height: 36px;
 
     --grid-pos-x: 0;

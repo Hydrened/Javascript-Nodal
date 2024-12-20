@@ -9,9 +9,8 @@
         <link rel="stylesheet" href="css/base.css">
         <link rel="stylesheet" href="css/animations.css">
         <link rel="stylesheet" href="css/frame.css">
-        <link rel="stylesheet" href="css/left-container.css">
         <link rel="stylesheet" href="css/center-container.css">
-        <link rel="stylesheet" href="css/right-container.css">
+        <link rel="stylesheet" href="css/aside-container.css">
         <link rel="stylesheet" href="css/class-tab.css">
         <link rel="stylesheet" href="css/current-class.css">
         <link rel="stylesheet" href="css/node.css">
@@ -22,6 +21,7 @@
         <script src="js/frame.js"></script>
         <script src="js/confirm.js"></script>
         <script src="js/message.js"></script>
+        <script src="js/interface.js"></script>
         <script src="js/contextmenu.js"></script>
         <script src="js/grid.js"></script>
         <script src="js/node.js"></script>
@@ -48,7 +48,8 @@
             </div>
         </header>
         <div class="page">
-            <section class="left-container">
+            <header></header>
+            <section class="aside-container">
                 <article>
                     <div class="details">
                         <h3>Classes</h3>
@@ -58,17 +59,31 @@
                 </article>
                 <article>
                     <div class="details">
-                        <h3>Methods</h3>
-                        <button>+</button>
+                        <h3 id="current-class-title">Current Class</h3>
                     </div>
-                    <ul id="method-list-container"></ul>
-                </article>
-                <article>
-                    <div class="details">
-                        <h3>Variables</h3>
-                        <button>+</button>
-                    </div>
-                    <ul id="variable-list-container"></ul>
+                    <ul>
+                        <li>
+                            <div class="details">
+                                <h3>Methods</h3>
+                                <button>+</button>
+                            </div>
+                            <ul id="method-list-container"></ul>
+                        </li>
+                        <li>
+                            <div class="details">
+                                <h3>Variables</h3>
+                                <button>+</button>
+                            </div>
+                            <ul id="variable-list-container"></ul>
+                        </li>
+                        <li>
+                            <div class="details">
+                                <h3>Local Variables</h3>
+                                <button>+</button>
+                            </div>
+                            <ul id="local-variable-list-container"></ul>
+                        </li>
+                    </ul>
                 </article>
             </section>
             <section class="center-container">
@@ -87,8 +102,103 @@
                     <h1 id="current-class-method-name"></h1>
                 </article>
             </section>
-            <section class="right-container">
-                <!-- current class parameters and returns -->
+            <section class="aside-container">
+                <article>
+                    <div class="details">
+                        <h3>Class settings</h3>
+                    </div>
+                    <ul>
+                        <li>
+                            <div class="details">
+                                <h3>Parameters</h3>
+                                <button>+</button>
+                            </div>
+                            <ul>
+                                <!-- <li>
+                                    <input type="text" value="Param 1" readonly>
+                                    <button class="cross">+</button>
+                                </li>
+                                <li>
+                                    <input type="text" value="Param 2" readonly>
+                                    <button class="cross">+</button>
+                                </li> -->
+                            </ul>
+                        </li>
+                        <li>
+                            <div class="details">
+                                <h3>Variables default values</h3>
+                            </div>
+                            <ul>
+                                <!-- <li>
+                                    <p>Variable 1</p>
+                                    <input type="text">
+                                </li>
+                                <li>
+                                    <p>Variable 2</p>
+                                    <input type="text">
+                                </li> -->
+                            </ul>
+                        </li>
+                    </ul>
+                </article>
+                <article>
+                    <div class="details">
+                        <h3>Method settings</h3>
+                    </div>
+                    <ul>
+                        <li>
+                            <p>Pure</p>
+                            <input type="checkbox">
+                        </li>
+                        <li>
+                            <div class="details">
+                                <h3>Parameters</h3>
+                                <button>+</button>
+                            </div>
+                            <ul>
+                                <!-- <li>
+                                    <input type="text" value="Param 1" readonly>
+                                    <button class="cross">+</button>
+                                </li>
+                                <li>
+                                    <input type="text" value="Param 2" readonly>
+                                    <button class="cross">+</button>
+                                </li> -->
+                            </ul>
+                        </li>
+                        <li>
+                            <div class="details">
+                                <h3>Returns</h3>
+                                <button>+</button>
+                            </div>
+                            <ul>
+                                <!-- <li>
+                                    <input type="text" value="Return 1" readonly>
+                                    <button class="cross">+</button>
+                                </li>
+                                <li>
+                                    <input type="text" value="Return 2" readonly>
+                                    <button class="cross">+</button>
+                                </li> -->
+                            </ul>
+                        </li>
+                        <li>
+                            <div class="details">
+                                <h3>Variables default values</h3>
+                            </div>
+                            <ul>
+                                <!-- <li>
+                                    <p>Variable 1</p>
+                                    <input type="text">
+                                </li>
+                                <li>
+                                    <p>Variable 2</p>
+                                    <input type="text">
+                                </li> -->
+                            </ul>
+                        </li>
+                    </ul>
+                </article>
             </section>
         </div>
     </body>

@@ -31,14 +31,14 @@ class Class {
     removeMethod(name) {
         if (this.app.currentClass.currentMethod.name == name) this.app.currentClass.openMethod("Constructor");
         Object.values(this.app.classes).forEach((c) => Object.entries(c.methods).forEach(([methodName, methodValue]) => {
-            if (methodName != name) methodValue.nodes.filter((n) => n.data.title == name).forEach((n) => methodValue.removeNode(n.uid));
+            if (methodName != name) methodValue.nodes.filter((n) => n.data.title == name && n.data.type == "method").forEach((n) => methodValue.removeNode(n.uid));
         }));
         delete this.methods[name];
         this.app.refreshInterfaces();
     }
 
     renameMethod(oldName, newName) {
-        if (oldName == newName) return false;
+        if (oldName == newName || newName == "") return false;
         if (Object.keys(this.methods).includes(newName)) {
             this.app.error(`Method named "${newName}" already exist`);
             return false;
@@ -48,7 +48,7 @@ class Class {
         this.methods[newName].name = newName;
         delete this.methods[oldName];
         
-        Object.values(this.app.classes).forEach((c) => Object.values(c.methods).forEach((method) => Object.values(method.nodes).filter((node) => node.data.title == oldName).forEach((node) => node.data.title = newName)));
+        Object.values(this.app.classes).forEach((c) => Object.values(c.methods).forEach((method) => Object.values(method.nodes).filter((node) => node.data.title == oldName && node.data.type == "method").forEach((node) => node.data.title = newName)));
         this.openMethod(this.currentMethod.name, true);
         
         this.app.refreshInterfaces();
@@ -73,14 +73,14 @@ class Class {
 
     removeVariable(name) {
         Object.values(this.app.classes).forEach((c) => Object.entries(c.methods).forEach(([methodName, methodValue]) => {
-            methodValue.nodes.filter((n) => (n.data.title == `Get ${name}` || n.data.title == `Set ${name}`)).forEach((n) => methodValue.removeNode(n.uid));
+            methodValue.nodes.filter((n) => (n.data.title == `Get ${name}` || n.data.title == `Set ${name}`) && n.data.type == "variable").forEach((n) => methodValue.removeNode(n.uid));
         }));
         delete this.variables[name];
         this.app.refreshInterfaces();
     }
 
     renameVariable(oldName, newName) {
-        if (oldName == newName) return false;
+        if (oldName == newName || newName == "") return false;
         if (Object.keys(this.variables).includes(newName)) {
             this.app.error(`Variable named "${newName}" already exist`);
             return false;
@@ -88,7 +88,7 @@ class Class {
         this.variables[newName] = this.variables[oldName];
         delete this.variables[oldName];
 
-        Object.values(this.app.classes).forEach((c) => Object.values(c.methods).forEach((method) => Object.values(method.nodes).filter((node) => node.id >= 1000000 && node.data.from == this.name).forEach((node) => node.data.title = `${node.data.title.slice(0, 4)} ${newName}`)));
+        Object.values(this.app.classes).forEach((c) => Object.values(c.methods).forEach((method) => Object.values(method.nodes).filter((node) => (node.data.title == `Get ${oldName}` || node.data.title == `Set ${oldName}`) && node.data.type == "variable" && node.data.from == this.name).forEach((node) => node.data.title = `${node.data.title.slice(0, 4)} ${newName}`)));
         this.openMethod(this.currentMethod.name, true);
 
         this.app.refreshInterfaces();

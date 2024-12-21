@@ -25,6 +25,7 @@
 
     --scroll-width: 8px;
     --frame-height: 36px;
+    --under-frame-nav-height: 24px;
     --header-height: 18px;
     --aside-container-width: minmax(300px, 20vw);
     --center-container-width: 1fr;

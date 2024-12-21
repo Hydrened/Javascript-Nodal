@@ -1,3 +1,7 @@
+## HJN-1.0.9
+#### ADDED
+- main nav bar 
+
 ## HJN-1.0.8
 #### ADDED
 - new class instance node

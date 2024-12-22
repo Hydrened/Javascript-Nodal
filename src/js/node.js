@@ -75,4 +75,14 @@ class Node {
         this.element.style.top = `${this.pos.y}px`;
         this.element.style.left = `${this.pos.x}px`;
     }
+
+    getRect() {
+        const rect = this.element.getBoundingClientRect();
+        return {
+            x: this.pos.x,
+            y: this.pos.y,
+            width: rect.width,
+            height: rect.height,
+        };
+    }
 };

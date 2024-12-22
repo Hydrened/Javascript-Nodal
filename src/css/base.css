@@ -97,7 +97,7 @@ svg.fill.main-color-hover:hover, svg.fill.main-color-hover:hover * {
 div.page {
     height: calc(100vh - var(--frame-height));
     display: grid;
-    grid-template-rows: var(--header-height) var(--under-frame-nav-height) 1fr;
+    grid-template-rows: var(--under-frame-nav-height) var(--header-height) 1fr;
     grid-template-columns: var(--aside-container-width) var(--center-container-width) var(--aside-container-width);
 }
 div.page > section.aside-container {

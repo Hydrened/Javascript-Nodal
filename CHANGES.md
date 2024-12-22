@@ -1,3 +1,10 @@
+## HJN-1.0.10
+#### ADDED
+- select zone
+- select multiple nodes
+- remove focused nodes
+- move focused nodes
+
 ## HJN-1.0.9
 #### ADDED
 - main nav bar 

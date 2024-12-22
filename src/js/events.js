@@ -3,8 +3,10 @@ class Events {
         this.app = a;
         this.linker1 = null;
         this.keydown = [];
-        this.held = null;
+        this.held = [];
         this.ctxMenu = null;
+        this.origin = null;
+        this.zone = null;
         
         this.main();
         this.linkNode();
@@ -12,6 +14,7 @@ class Events {
         this.contextMenu();
         this.removeNode();
         this.leftInterface();
+        this.selectZone();
     }
 
     main() {
@@ -77,50 +80,51 @@ class Events {
 
     moveNode() {
         this.app.elements.center.currentClassContainer.addEventListener("mousedown", (e) => {
-            this.app.currentClass.currentMethod.nodes.forEach((node) => node.element.classList.remove("focused"));
-
             if (e.button != 0) return;
             if (e.target.tagName != "HEADER") return;
             if (!e.target.parentElement.classList.contains("node")) return;
 
-            const node = this.app.currentClass.currentMethod.nodes.filter((node) => node.uid == e.target.parentElement.id)[0];
-            node.element.classList.add("focused");
-            const nodeRect = node.element.getBoundingClientRect();
-            this.held = {
-                node: node,
-                offset: {
-                    x: e.x - nodeRect.x,
-                    y: e.y - nodeRect.y,
-                },
-            };
+            const r = [...this.app.elements.center.nodeContainer.children].filter((node) => node.contains(e.target) || node == e.target)[0];
+            if (r) r.classList.add("focused");
+
+            [...this.app.elements.center.nodeContainer.querySelectorAll(".node.focused")].forEach((element) => {
+                const node = this.app.currentClass.currentMethod.nodes.filter((node) => node.uid == element.id)[0];
+                const rect = node.element.getBoundingClientRect();
+                this.held.push({
+                    node: node,
+                    offset: {
+                        x: e.x - rect.x,
+                        y: e.y - rect.y,
+                    },
+                });
+            });
         });
 
-        this.app.elements.center.currentClassContainer.addEventListener("click", (e) => {
-            const node = [...this.app.elements.center.nodeContainer.children].filter((node) => node.contains(e.target))[0];
-            if (node) node.classList.add("focused");
-        });
-
-        function updateNodePos(events, e, snap) {
+        function updateFocusedNodesPos(events, e, snap) {
             const cursorPos = events.app.getCursorPos(e);
-            events.held.node.pos.x = cursorPos.x - events.held.offset.x;
-            events.held.node.pos.y = cursorPos.y - events.held.offset.y;
-            
-            if (snap) events.held.node.snap();
-            events.held.node.updatePos();
 
-            events.app.currentClass.currentMethod.getLinksByNodeUID(events.held.node.element.id).forEach((link) => link.hide());
-            events.app.currentClass.currentMethod.refreshLinks();
+            events.held.forEach((h) => {
+                h.node.pos.x = cursorPos.x - h.offset.x;
+                h.node.pos.y = cursorPos.y - h.offset.y;
+
+                if (snap) h.node.snap();
+                h.node.updatePos();
+
+                events.app.currentClass.currentMethod.getLinksByNodeUID(h.node.element.id).forEach((link) => link.hide());
+                events.app.currentClass.currentMethod.refreshLinks();
+            });
         }
 
         this.app.elements.center.currentClassContainer.addEventListener("mouseup", (e) => {
-            if (!this.held) return;
-            updateNodePos(this, e, true);
-            this.held = null;
+            if (this.held.length == 0) return;
+            updateFocusedNodesPos(this, e, true);
+            this.held.forEach((h) => h.node.element.classList.add("focused"));
+            this.held = [];
         });
 
         this.app.elements.center.currentClassContainer.addEventListener("mousemove", (e) => {
-            if (!this.held) return;
-            updateNodePos(this, e, false);
+            if (this.held.length == 0) return;
+            updateFocusedNodesPos(this, e, false);
         });
     }
 
@@ -147,8 +151,7 @@ class Events {
     removeNode() {
         window.addEventListener("keydown", (e) => {
             if (["Delete","Backspace"].includes(e.key)) {
-                const focusedNode = document.querySelector(".node.focused");
-                if (focusedNode) this.app.currentClass.currentMethod.removeNode(focusedNode.id);
+                [...document.querySelectorAll(".node.focused")].forEach((node) => this.app.currentClass.currentMethod.removeNode(node.id));
             }
         });
     }
@@ -208,6 +211,57 @@ class Events {
                     i++;
                 }
             } else this.app.currentClass.currentMethod.createLocalVariable("Local variable");
+        });
+    }
+
+    selectZone() {
+        this.app.elements.center.currentClassContainer.addEventListener("mousedown", (e) => {
+            if (e.button != 0) return;
+            if (this.held.length == 0) this.app.currentClass.currentMethod.nodes.forEach((node) => node.element.classList.remove("focused"));
+            const pos = this.app.getCursorPos(e);
+            this.origin = pos;
+        });
+
+        this.app.elements.center.currentClassContainer.addEventListener("mousemove", (e) => {
+            if (!this.origin) return;
+            if (this.zone) this.zone.remove();
+            if (this.held.length > 0) return;
+            
+            const pos = this.app.getCursorPos(e);
+            const rect = {
+                x: Math.min(this.origin.x, pos.x),
+                y: Math.min(this.origin.y, pos.y),
+                width: Math.max(this.origin.x, pos.x) - Math.min(this.origin.x, pos.x),
+                height: Math.max(this.origin.y, pos.y) - Math.min(this.origin.y, pos.y),
+            };
+
+            this.zone = document.createElement("div");
+            this.zone.classList.add("focused-zone");
+            this.zone.style.top = `${rect.y}px`;
+            this.zone.style.left = `${rect.x}px`;
+            this.zone.style.width = `${rect.width}px`;
+            this.zone.style.height = `${rect.height}px`;
+            this.app.elements.center.nodeContainer.appendChild(this.zone);
+        });
+
+        this.app.elements.center.currentClassContainer.addEventListener("mouseup", (e) => {
+            if (e.button != 0) return;
+            if (this.zone) this.zone.remove();
+            const pos = this.app.getCursorPos(e);
+            const rect = {
+                x: Math.min(this.origin.x, pos.x),
+                y: Math.min(this.origin.y, pos.y),
+                width: Math.max(this.origin.x, pos.x) - Math.min(this.origin.x, pos.x),
+                height: Math.max(this.origin.y, pos.y) - Math.min(this.origin.y, pos.y),
+            };
+            this.origin = null;
+            
+            this.app.currentClass.currentMethod.nodes.forEach((node) => {
+                const nodeRect = node.getRect();
+                if (rect.x < nodeRect.x + nodeRect.width && rect.x + rect.width > nodeRect.x && rect.y < nodeRect.y + nodeRect.height && rect.y + rect.height > nodeRect.y) {
+                    node.element.classList.add("focused");
+                }
+            });
         });
     }
 };

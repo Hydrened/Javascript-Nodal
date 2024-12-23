@@ -25,11 +25,11 @@
 
     --scroll-width: 8px;
     --frame-height: 36px;
-    --under-frame-nav-height: 24px;
+    --sub-frame-nav-height: 24px;
     --header-height: 18px;
     --aside-container-width: minmax(300px, 20vw);
     --center-container-width: 1fr;
-    --class-tabs-nav-height: 36px;
+    --tabs-height: 32px;
 
     --grid-pos-x: 0;
     --grid-pos-y: 0;

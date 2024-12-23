@@ -9,29 +9,22 @@
         <link rel="stylesheet" href="css/base.css">
         <link rel="stylesheet" href="css/animations.css">
         <link rel="stylesheet" href="css/frame.css">
-        <link rel="stylesheet" href="css/center-container.css">
+        <link rel="stylesheet" href="css/sub-frame.css">
         <link rel="stylesheet" href="css/aside-container.css">
-        <link rel="stylesheet" href="css/class-tab.css">
-        <link rel="stylesheet" href="css/current-class.css">
-        <link rel="stylesheet" href="css/node.css">
-        <link rel="stylesheet" href="css/contextmenu.css">
+        <link rel="stylesheet" href="css/tabs.css">
         <link rel="stylesheet" href="css/message.css">
-        <link rel="stylesheet" href="css/confirm.css">
         <script src="js/base.js"></script>
         <script src="js/frame.js"></script>
-        <script src="js/confirm.js"></script>
+        <script src="js/sub-frame.js"></script>
+        <script src="js/manager.js"></script>
         <script src="js/message.js"></script>
-        <script src="js/interface.js"></script>
-        <script src="js/contextmenu.js"></script>
-        <script src="js/grid.js"></script>
-        <script src="js/node.js"></script>
+        <script src="js/tabs.js"></script>
         <script src="js/link.js"></script>
+        <script src="js/node.js"></script>
         <script src="js/method.js"></script>
         <script src="js/class.js"></script>
-        <script src="js/events.js"></script>
         <script src="js/app.js"></script>
     </head>
-    <body>
         <header class="frame">
             <p id="window-title"></p>
             <div class="drag-area"></div>
@@ -47,13 +40,8 @@
                 </button>
             </div>
         </header>
+        <nav class="sub-frame"><ul id="sub-frame-menu-container"></ul></nav>
         <div class="page">
-            <nav>
-                <ul>
-                    <li>File</li>
-                    <li>Edit</li>
-                </ul>
-            </nav>
             <header></header>
             <section class="aside-container">
                 <article>
@@ -82,6 +70,13 @@
                             </div>
                             <ul id="variable-list-container"></ul>
                         </li>
+                    </ul>
+                </article>
+                <article>
+                    <div class="details">
+                        <h3 id="current-method-title">Current method</h3>
+                    </div>
+                    <ul>
                         <li>
                             <div class="details">
                                 <h3>Local Variables</h3>
@@ -93,20 +88,16 @@
                 </article>
             </section>
             <section class="center-container">
-                <nav class="class-tabs-nav">
-                    <ul id="classes-tabs"></ul>
-                </nav>
-                <nav class="class-method-tabs-nav">
-                    <ul id="classes-method-tabs"></ul>
-                </nav>
-                <article id="current-class-container">
+                <nav><ul id="method-tabs"></ul></nav>
+
+                <!-- <article id="current-class-container">
                     <div class="current-class-grid-container">
                         <div class="current-class-main-grid"></div>
                         <div class="current-class-secondary-grid"></div>
                     </div>
                     <div id="node-container"></div>
                     <h1 id="current-class-method-name"></h1>
-                </article>
+                </article> -->
             </section>
             <section class="aside-container">
                 <article>

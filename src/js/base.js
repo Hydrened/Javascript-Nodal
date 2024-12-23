@@ -5,6 +5,7 @@ const path = require("path");
 
 window.addEventListener("load", () => {
     const frame = new Frame();
+    const subFrame = new SubFrame();
 
     ipcRenderer.send("get-main-folder");
     ipcRenderer.on("send-main-folder", (e, mainFolder) => {

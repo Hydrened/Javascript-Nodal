@@ -1,4 +1,0 @@
-section.center-container {
-    display: grid;
-    grid-template-rows: var(--class-tabs-nav-height) var(--class-tabs-nav-height) 1fr;
-}

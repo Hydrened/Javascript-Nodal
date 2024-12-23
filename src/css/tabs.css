@@ -1,0 +1,35 @@
+ul#method-tabs {
+    height: var(--tabs-height);
+    display: flex;
+    background-color: var(--bg-col-2);
+}
+ul#method-tabs > li {
+    min-width: 8rem;
+    height: 100%;
+    padding-inline: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    gap: 0.7rem;
+    border-right: 2px solid var(--bg-col-7);
+    transition: 100ms;
+}
+ul#method-tabs > li:hover {
+    background-color: var(--bg-col-7);
+}
+ul#method-tabs > li.on {
+    background-color: var(--bg-col-6);
+}
+ul#method-tabs > li > p {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+    font-size: 0.8rem;
+}
+ul#method-tabs > li > p > span {
+    color: var(--font-col-2);
+    font-size: 0.7rem;
+}
+ul#method-tabs > li > button.cross {
+    font-size: 1.1rem;
+}

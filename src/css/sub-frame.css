@@ -1,0 +1,52 @@
+nav.sub-frame {
+    overflow: visible;
+}
+nav.sub-frame > ul {
+    height: var(--sub-frame-nav-height);
+    display: flex;
+    overflow: visible;
+}
+nav.sub-frame > ul > li {
+    height: 100%;
+    padding-inline: 0.5rem;
+    position: relative;
+    display: flex;
+    align-items: center;
+    font-size: 0.8rem;
+    overflow: visible;
+}
+nav.sub-frame > ul > li:hover {
+    background-color: var(--bg-col-8);
+}
+nav.sub-frame > ul > li > ul {
+    min-width: 13rem;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    border: 1px solid black;
+    border-radius: 0.3rem;
+    background-color: var(--bg-col-2);
+    transform: translateY(100%);
+    display: none;
+}
+nav.sub-frame > ul > li:hover > ul {
+    display: block;
+}
+
+
+
+nav.sub-frame > ul > li > ul > li {
+    padding: 0.5rem 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    cursor: pointer;
+    font-size: 0.75rem;
+    white-space: nowrap;
+}
+nav.sub-frame > ul > li > ul > li:hover {
+    background-color: var(--bg-col-7);
+}
+nav.sub-frame > ul > li > ul > li > span {
+    color: var(--font-col-2);
+}

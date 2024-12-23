@@ -1,3 +1,10 @@
+## HJN-2.0.0
+#### REMAKE
+- method tabs
+#### ADDED
+- menu
+- menu shortcuts
+
 ## HJN-1.0.10
 #### ADDED
 - select zone

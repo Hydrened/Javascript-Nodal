@@ -11,14 +11,17 @@
         <link rel="stylesheet" href="css/frame.css">
         <link rel="stylesheet" href="css/sub-frame.css">
         <link rel="stylesheet" href="css/aside-container.css">
-        <link rel="stylesheet" href="css/tabs.css">
         <link rel="stylesheet" href="css/message.css">
+        <link rel="stylesheet" href="css/confirm.css">
         <script src="js/base.js"></script>
         <script src="js/frame.js"></script>
         <script src="js/sub-frame.js"></script>
+        <script src="js/functions.js"></script>
+        <script src="js/confirm.js"></script>
+        <script src="js/events.js"></script>
         <script src="js/manager.js"></script>
+        <script src="js/interface.js"></script>
         <script src="js/message.js"></script>
-        <script src="js/tabs.js"></script>
         <script src="js/link.js"></script>
         <script src="js/node.js"></script>
         <script src="js/method.js"></script>
@@ -88,8 +91,6 @@
                 </article>
             </section>
             <section class="center-container">
-                <nav><ul id="method-tabs"></ul></nav>
-
                 <!-- <article id="current-class-container">
                     <div class="current-class-grid-container">
                         <div class="current-class-main-grid"></div>
@@ -110,31 +111,13 @@
                                 <h3>Parameters</h3>
                                 <button>+</button>
                             </div>
-                            <ul>
-                                <!-- <li>
-                                    <input type="text" value="Param 1" readonly>
-                                    <button class="cross">+</button>
-                                </li>
-                                <li>
-                                    <input type="text" value="Param 2" readonly>
-                                    <button class="cross">+</button>
-                                </li> -->
-                            </ul>
+                            <ul id="current-class-parameters-container"></ul>
                         </li>
                         <li>
                             <div class="details">
                                 <h3>Variables default values</h3>
                             </div>
-                            <ul>
-                                <!-- <li>
-                                    <p>Variable 1</p>
-                                    <input type="text">
-                                </li>
-                                <li>
-                                    <p>Variable 2</p>
-                                    <input type="text">
-                                </li> -->
-                            </ul>
+                            <ul id="current-class-variables-container"></ul>
                         </li>
                     </ul>
                 </article>
@@ -152,23 +135,14 @@
                                 <h3>Parameters</h3>
                                 <button>+</button>
                             </div>
-                            <ul>
-                                <!-- <li>
-                                    <input type="text" value="Param 1" readonly>
-                                    <button class="cross">+</button>
-                                </li>
-                                <li>
-                                    <input type="text" value="Param 2" readonly>
-                                    <button class="cross">+</button>
-                                </li> -->
-                            </ul>
+                            <ul id="current-method-parameters-container"></ul>
                         </li>
                         <li>
                             <div class="details">
                                 <h3>Returns</h3>
                                 <button>+</button>
                             </div>
-                            <ul>
+                            <ul id="current-method-returns-container">
                                 <!-- <li>
                                     <input type="text" value="Return 1" readonly>
                                     <button class="cross">+</button>
@@ -183,7 +157,7 @@
                             <div class="details">
                                 <h3>Variables default values</h3>
                             </div>
-                            <ul>
+                            <ul id="current-method-variables-container">
                                 <!-- <li>
                                     <p>Variable 1</p>
                                     <input type="text">

@@ -2,17 +2,13 @@ class App {
     constructor(mainFolder) {
         this.mainFolder = mainFolder;
 
-        this.elements = {
-            center: {
-                tabContainer: document.getElementById("method-tabs"),
-            },
-        };
         this.classes = {};
         this.currentClass = null;
 
         this.initData().then(() => {
             this.manager = new Manager(this);
-            this.tabs = new Tabs(this);
+            this.interface = new Interface(this);
+            this.events = new Events(this);
 
             this.createClass("Main");
         });
@@ -34,28 +30,49 @@ class App {
 
     success(message) {
         new Message(this, "success", message);
+        return true;
     }
 
     error(message) {
         new Message(this, "error", message);
+        return false;
     }
 
     createClass(name) {
-        this.manager.create(name, this.classes, "method", () => {
+        this.manager.create(this.classes, name, "class", () => {
             this.classes[name] = new Class(this, name);
             this.openClass(name);
         });
     }
 
     removeClass(name) {
-
+        this.manager.remove(this.classes, name);
     }
 
     renameClass(oldName, newName) {
-
+        return this.manager.rename(this.classes, oldName, newName, "Class");
     }
 
     openClass(name) {
+        this.currentClass = this.classes[name];
+        this.currentClass.open();
+        this.interface.refresh();
+    }
 
+    getNextUID(uids) {
+        for (let i = 0; i <= uids.length; i++) if (!uids.some(uid => uid == i)) return i;
+        return 0;
+    }
+
+    getNextName(array, type) {
+        if (!Array.isArray(array)) array = Object.keys(array);
+        const defaultNames = array.filter((name) => name.includes(type));
+        if (defaultNames.includes(type)) {
+            let i = 2;
+            while (true && i < 1000) {
+                if (!defaultNames.includes(`${type} ${i}`)) return `${type} ${i}`;
+                i++;
+            }
+        } else return type;
     }
 };

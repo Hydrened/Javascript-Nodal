@@ -1,9 +1,26 @@
+## HJN-2.0.1
+#### REMAKE
+#### ADDED
+- current class vizualizer
+- current method vizualizer
+- add class parameter
+- remove class parameter
+- rename class parameter
+- set class variables default values
+- add method parameter
+- remove method parameter
+- rename method parameter
+#### REMOVED
+- tabs
+
 ## HJN-2.0.0
 #### REMAKE
 - method tabs
 #### ADDED
 - menu
 - menu shortcuts
+## FIXED
+- left interface's variable in class
 
 ## HJN-1.0.10
 #### ADDED

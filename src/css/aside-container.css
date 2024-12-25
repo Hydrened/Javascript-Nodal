@@ -58,6 +58,9 @@
     display: flex;
     align-items: center;
 }
+.aside-container > article ul > li:not(:has(div.details)):hover {
+    background-color: var(--bg-col-7);
+}
 .aside-container > article ul > li:not(:has(div.details)) * {
     font-size: 0.75rem;
 }
@@ -73,6 +76,9 @@
     transition: 100ms;
     border: 1px solid transparent;
 }
+.aside-container > article input:not([type="checkbox"]).current {
+    color: var(--col-1);
+}
 .aside-container > article input:focus:not(:read-only) {
     border-color: var(--col-1);
 }
@@ -83,10 +89,10 @@
 .aside-container > article ul > li:not(:has(div.details)):has(input):has(button) {
     padding-inline: 0.25rem;
     gap: 0.2rem;
+    justify-content: space-between;
 }
 .aside-container > article ul > li:not(:has(div.details)):has(p):has(input) > input:not([type="checkbox"]),
 .aside-container > article ul > li:not(:has(div.details)):has(input):has(button) > input {
-    flex: 1;
     background-color: var(--bg-col-7);
 }
 .aside-container > article ul > li:not(:has(div.details)) input:read-only {

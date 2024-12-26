@@ -39,7 +39,7 @@ class App {
     }
 
     createClass(name) {
-        this.manager.create(this.classes, name, "class", () => {
+        this.manager.create(this.classes, name, "Main", "class", () => {
             this.classes[name] = new Class(this, name);
             this.openClass(name);
         });

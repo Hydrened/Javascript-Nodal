@@ -22,9 +22,24 @@ class SubFrame {
                 ],
             },
             {
-                title: "Test",
+                title: "Edit",
                 submenus: [
-                    { title: "Test", shortcut: null, call: null },
+                    { title: "Undo", shortcut: { title: "Ctrl+Z", isValid: (e) => {
+                        return (e.ctrlKey && !e.shiftKey && e.key.toUpperCase() == "Z");
+                    }}, call: null },
+                    { title: "Redo", shortcut: { title: "Ctrl+Y", isValid: (e) => {
+                        return (e.ctrlKey && !e.shiftKey && e.key.toUpperCase() == "Y");
+                    }}, call: null },
+                    { title: "br" },
+                    { title: "Copy", shortcut: { title: "Ctrl+C", isValid: (e) => {
+                        return (e.ctrlKey && !e.shiftKey && e.key.toUpperCase() == "C");
+                    }}, call: null },
+                    { title: "Cut", shortcut: { title: "Ctrl+X", isValid: (e) => {
+                        return (e.ctrlKey && !e.shiftKey && e.key.toUpperCase() == "X");
+                    }}, call: null },
+                    { title: "Paste", shortcut: { title: "Ctrl+V", isValid: (e) => {
+                        return (e.ctrlKey && !e.shiftKey && e.key.toUpperCase() == "V");
+                    }}, call: null },
                 ],
             }
         ];
@@ -51,9 +66,14 @@ class SubFrame {
             li.appendChild(submenuContainer);
 
             menu.submenus.forEach((submenu) => {
+                const br = submenu.title == "br";
+                
                 const sLi = document.createElement("li");
-                sLi.textContent = submenu.title;
+                if (!br) sLi.textContent = submenu.title;
+                else sLi.classList.add("br");
                 submenuContainer.appendChild(sLi);
+
+                if (br) return;
                 
                 if (submenu.shortcut) {
                     const shortcut = document.createElement("span");

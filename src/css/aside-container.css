@@ -76,6 +76,9 @@
     transition: 100ms;
     border: 1px solid transparent;
 }
+.aside-container > article li:has(input[type="checkbox"]:disabled) {
+    display: none;
+}
 .aside-container > article input:not([type="checkbox"]).current {
     color: var(--col-1);
 }
@@ -95,8 +98,12 @@
 .aside-container > article ul > li:not(:has(div.details)):has(input):has(button) > input {
     background-color: var(--bg-col-7);
 }
-.aside-container > article ul > li:not(:has(div.details)) input:read-only {
-    background-color: transparent;
+.aside-container > article ul > li:not(:has(div.details)):has(p):has(input):hover > input:not([type="checkbox"]),
+.aside-container > article ul > li:not(:has(div.details)):has(input):has(button):hover > input {
+    background-color: var(--bg-col-8);
+}
+.aside-container > article ul > li:not(:has(div.details)) input.read-only {
+    background-color: transparent !important;
 }
 .aside-container > article ul > li:not(:has(div.details)):has(button.disabled) > input:read-only {
     cursor: default;

@@ -21,13 +21,14 @@ class Class {
     }
 
     createMethod(name) {
-        this.app.manager.create(this.methods, name, "method", () => {
+        this.app.manager.create(this.methods, name, "Constructor", "method", () => {
             this.methods[name] = new Method(this.app, this, name);
             this.openMethod(name);
         });
     }
 
     removeMethod(name) {
+        if (this.currentMethod.name == name) this.openMethod("Constructor");
         this.app.manager.remove(this.methods, name);
     }
 
@@ -43,7 +44,7 @@ class Class {
     }
 
     createVariable(name) {
-        this.app.manager.create(this.variables, name, "variable", () => {
+        this.app.manager.create(this.variables, name, null, "variable", () => {
             this.variables[name] = undefined;
         });
     }
@@ -57,7 +58,7 @@ class Class {
     }
 
     createParameter(name) {
-        this.app.manager.create(this.parameters, name, "parameter", () => {
+        this.app.manager.create(this.parameters, name, null, "parameter", () => {
             this.parameters.push(name);
         });
     }

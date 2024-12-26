@@ -15,6 +15,7 @@ class Message {
         setTimeout(() => this.element.classList.add("show"), 0);
         this.element.textContent = this.message;
         // this.app.elements.center.currentClassContainer.appendChild(this.element);
+        console.log(this.type + ": " + this.message);
         
         this.element.addEventListener("click", () => this.destroy());
         setTimeout(() => this.destroy(), 5000);

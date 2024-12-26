@@ -23,7 +23,7 @@ nav.sub-frame > ul > li > ul {
     position: absolute;
     bottom: 0;
     left: 0;
-    border: 1px solid black;
+    border: 1px solid var(--bg-col-7);
     border-radius: 0.3rem;
     background-color: var(--bg-col-2);
     transform: translateY(100%);
@@ -36,15 +36,30 @@ nav.sub-frame > ul > li:hover > ul {
 
 
 nav.sub-frame > ul > li > ul > li {
-    padding: 0.5rem 0.5rem;
+    padding: 0.5rem 0.9rem;
     display: flex;
     justify-content: space-between;
     gap: 1rem;
-    cursor: pointer;
     font-size: 0.75rem;
     white-space: nowrap;
 }
-nav.sub-frame > ul > li > ul > li:hover {
+nav.sub-frame > ul > li > ul > li:not(.br) {
+    cursor: pointer;
+}
+nav.sub-frame > ul > li > ul > li.br {
+    height: 2px;
+    padding: 0;
+    position: relative;
+}
+nav.sub-frame > ul > li > ul > li.br::after {
+    content: "";
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: 1px solid var(--bg-col-7);
+}
+nav.sub-frame > ul > li > ul > li:not(.br):hover {
     background-color: var(--bg-col-7);
 }
 nav.sub-frame > ul > li > ul > li > span {

@@ -1,0 +1,93 @@
+.current-method-container {
+    height: 100%;
+    position: relative;
+}
+
+
+
+#path {
+    height: var(--path-height);
+    padding-inline: 0.7rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    background-color: var(--bg-col-2);
+    font-size: 0.8rem;
+}
+#path > p {
+    position: relative;
+    overflow: visible;
+}
+#path > p:not(:last-of-type)::after {
+    content: ">";
+    width: auto;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    right: -0.5rem;
+    transform: translateX(100%);
+    font-family: Courier;
+    font-weight: 900;
+}
+
+
+
+#current-class-method-name {
+    position: absolute;
+    bottom: 0.6rem;
+    right: 1rem;
+    font-size: 5rem;
+    font-family: var(--class-font);
+    color: white;
+    opacity: 0.3;
+    z-index: 100;
+    pointer-events: none;
+}
+
+
+
+#current-method {
+    height: 100%;
+    position: relative;
+}
+#current-method.moving {
+    cursor: grabbing;
+}
+#current-method.linking {
+    cursor: crosshair;
+}
+
+
+
+.grid-container {
+    position: relative;
+}
+.grid-container > * {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-position: inherit;
+}
+.grid-container {
+    width: 100%;
+    height: 100%;
+    background-position: var(--grid-pos-x) var(--grid-pos-y);
+}
+.main-grid {
+    background-size: var(--main-grid-size) var(--main-grid-size);
+    background-image: linear-gradient(to right, rgb(5,5,5) 1px, transparent 1px), linear-gradient(to bottom, rgb(5,5,5) 1px, transparent 1px);
+    z-index: 2;
+}
+.secondary-grid {
+    background-size: var(--secondary-grid-size) var(--secondary-grid-size);
+    background-image: linear-gradient(to right, rgb(53,53,53) 1px, transparent 1px), linear-gradient(to bottom, rgb(53,53,53) 1px, transparent 1px);
+    z-index: 1;
+}
+
+
+
+#node-container {
+    position: absolute;
+    top: var(--grid-pos-y);
+    left: var(--grid-pos-x);
+}

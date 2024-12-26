@@ -3,11 +3,11 @@ class Manager {
         this.app = app;
     }
 
-    create(array, name, type, then) {
+    create(array, name, exception, type, then) {
         if (!Array.isArray(array)) array = Object.keys(array);
         if (!array.includes(name)) {
             if (then) then();
-            this.app.success(`Successfully created ${type} "${name}"`);
+            if (name != exception) this.app.success(`Successfully created ${type} "${name}"`);
             setTimeout(() => this.app.interface.refresh(), 0);
         } else this.app.error(`A ${type} is already named "${name}"`);
     }

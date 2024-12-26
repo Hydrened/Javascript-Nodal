@@ -103,7 +103,7 @@ svg.fill.main-color-hover:hover, svg.fill.main-color-hover:hover * {
 
 
 div.page {
-    height: calc(100vh - var(--frame-height));
+    height: calc(100vh - var(--frame-height) - var(--sub-frame-nav-height));
     display: grid;
     grid-template-rows: var(--header-height) 1fr;
     grid-template-columns: var(--aside-container-width) var(--center-container-width) var(--aside-container-width);

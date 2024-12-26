@@ -1,5 +1,16 @@
+## HJN-2.0.2
+#### REMAKE
+- grid controls
+#### ADDED
+- add method return
+- remove method return
+- rename method return
+- set method lcoal variables default values
+- pure setting for methods
+
 ## HJN-2.0.1
 #### REMAKE
+- left interface
 #### ADDED
 - current class vizualizer
 - current method vizualizer

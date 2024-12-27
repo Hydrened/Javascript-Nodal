@@ -40,6 +40,13 @@ class SubFrame {
                     { title: "Paste", shortcut: { title: "Ctrl+V", isValid: (e) => {
                         return (e.ctrlKey && !e.shiftKey && e.key.toUpperCase() == "V");
                     }}, call: null },
+                    { title: "Duplicate", shortcut: { title: "Ctrl+D", isValid: (e) => {
+                        return (e.ctrlKey && !e.shiftKey && e.key.toUpperCase() == "D");
+                    }}, call: null },
+                    { title: "br" },
+                    { title: "Remove", shortcut: { title: "Suppr", isValid: (e) => {
+                        return (!e.ctrlKey && !e.shiftKey && (e.key.toUpperCase() == "Backspace" || e.key.toUpperCase() == "Delete"));
+                    }}, call: null },
                 ],
             }
         ];

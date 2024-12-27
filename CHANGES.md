@@ -1,3 +1,19 @@
+## HJN-2.0.3
+#### REMAKE
+- node menu
+- node movements
+- node area selection
+- node links update
+#### ADDED
+- class parameters to node menu
+- method parameter to node menu
+- local variables to node menu
+- node menu context sensivity
+## FIXED
+- node menu y overflow
+- destroy context menu when updating window
+- window's minimum size
+
 ## HJN-2.0.2
 #### REMAKE
 - grid controls

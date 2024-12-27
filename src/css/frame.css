@@ -25,6 +25,7 @@ header.frame > div.buttons-container {
 
 
 header.frame > div.buttons-container > button {
+    padding-inline: 0.4rem;
     display: flex;
     justify-content: center;
     align-items: center;

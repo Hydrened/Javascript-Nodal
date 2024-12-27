@@ -40,8 +40,8 @@ class Application {
         const windowFile = path.join(this.mainFolder, "window.json");
         const jsonData = (fs.existsSync(windowFile)) ? JSON.parse(fs.readFileSync(windowFile, "utf8")) : null;
 
-        const minW = 950;
-        const minH = 650;
+        const minW = 1150;
+        const minH = 830;
 
         const x = (jsonData) ? jsonData.x : 0;
         const y = (jsonData) ? jsonData.y : 0;

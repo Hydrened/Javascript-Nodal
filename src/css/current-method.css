@@ -90,4 +90,11 @@
     position: absolute;
     top: var(--grid-pos-y);
     left: var(--grid-pos-x);
+    overflow: visible;
+    z-index: 50;
+}
+#node-container > .zone {
+    position: absolute;
+    border: 1px dashed var(--col-1);
+    z-index: 20;
 }

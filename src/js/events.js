@@ -3,9 +3,14 @@ class Events {
         this.app = app;
 
         this.grid = {
-            pos: { x: 0, y: 0 }, 
+            pos: { x: 128, y: 128 }, 
             click: null, 
+            button: null,
+            moved: false,
         };
+        this.zone = null;
+        this.held = [];
+        this.linker = null;
 
         this.handleEvents();
     }
@@ -16,6 +21,19 @@ class Events {
         this.center();
 
         document.addEventListener("contextmenu", (e) => e.preventDefault());
+
+        document.addEventListener("keydown", (e) => {
+            switch (e.key) {
+                case "Escape": this.app.destroyNodeMenu(); break;
+                default: break;
+            }
+        });
+
+        document.addEventListener("mousedown", (e) => {
+            if (this.app.nodeMenu) if (!this.app.nodeMenu.element.contains(e.target)) setTimeout(() => this.app.destroyNodeMenu(), 0);
+        });
+
+        ipcRenderer.on("window-update", () => this.app.destroyNodeMenu());
     }
 
     left() {
@@ -52,36 +70,175 @@ class Events {
         const center = this.app.interface.elements.center;
         center.method.container.addEventListener("mousedown", (e) => {
             switch (e.button) {
-                case 0: break;
-                case 2:
-                    if (!this.grid.click) {
-                        const rect = this.app.interface.elements.center.method.container.getBoundingClientRect();
-                        this.grid.click = { x: this.grid.pos.x - e.x + rect.x, y: this.grid.pos.y - e.y + rect.y };
+
+                case 0:
+                    const clickedNode = this.getNodeByElement(e.target);
+                    const cursorPos = this.getCursorPos(e);
+
+                    if (clickedNode) {
+                        const nodeRect = clickedNode.getRect();
+
+                        if (!e.target.classList.contains("linker")) {
+                            if (e.target.tagName == "HEADER") {
+                                if (!clickedNode.element.classList.contains("focused")) {
+                                    [...center.method.nodeContainer.children].forEach((node) => node.classList.remove("focused"));
+                                    this.held = [];
+                                } else this.held.forEach((h) => {
+                                    h.offset.x -= cursorPos.x;
+                                    h.offset.x *= -1;
+                                    h.offset.y -= cursorPos.y;
+                                    h.offset.y *= -1;
+                                });
+    
+                                this.grid.click = cursorPos;
+                                this.grid.button = 0;
+                            }
+    
+                            clickedNode.element.classList.add("focused");
+                            if (this.held.filter((h) => h.node == clickedNode).length == 0) this.held.push({
+                                node: clickedNode,
+                                offset: {
+                                    x: cursorPos.x - nodeRect.x,
+                                    y: cursorPos.y - nodeRect.y,
+                                },
+                            });
+                        } else this.linker = this.getLinkerData(e.target);
+
+                    } else {
+                        [...center.method.nodeContainer.children].forEach((node) => node.classList.remove("focused"));
+                        this.held = [];
+                        
+                        this.grid.click = cursorPos;
+                        this.grid.button = 0;
                     }
                     break;
+
+                case 2:
+                    if (!this.grid.click) {
+                        this.grid.click = this.getCursorPos(e);
+                        this.grid.absClick = { x: e.x, y: e.y };
+                        this.grid.button = 2;
+                    }
+                    break;
+
                 default: break;
             }
         });
         center.method.container.addEventListener("mouseup", (e) => {
             switch (e.button) {
-                case 0: break;
-                case 2:
-                    const click = this.getCursorPos(e);
-                    center.method.container.classList.remove("moving");
-                    this.grid.click = null;
+
+                case 0:
+                    if (this.grid.button == 0) {
+                        // NODE ZONE SELECTION
+                        if (this.zone) {
+                            const zoneRect = this.getZoneRect(this.getCursorPos(e));
+                            const cursorPos = this.getCursorPos(e);
+
+                            this.app.currentClass.currentMethod.nodes.forEach((node) => {
+                                const nodeRect = node.getRect();
+
+                                if (zoneRect.x < nodeRect.x + nodeRect.width && zoneRect.x + zoneRect.width > nodeRect.x && zoneRect.y < nodeRect.y + nodeRect.height && zoneRect.y + zoneRect.height > nodeRect.y) {
+                                    node.element.classList.add("focused");
+
+                                    this.held.push({
+                                        node: node,
+                                        offset: {
+                                            x: nodeRect.x,
+                                            y: nodeRect.y,
+                                        },
+                                    });
+                                }
+                            });
+
+                            this.zone.remove();
+                            this.zone = null;
+                        } else {
+                            this.held.forEach((h) => {
+                                h.node.snap();
+                                h.node.updatePos();
+                                this.app.currentClass.currentMethod.getLinksByNodeUID(h.node.element.id).forEach((link) => link.hide());
+                                this.app.currentClass.currentMethod.refreshLinks();
+                            });
+
+                            [...center.method.nodeContainer.children].forEach((node) => node.classList.remove("focused"));
+                            this.held = [];
+                        }
+                        
+                    } else if (this.linker && e.target.classList.contains("linker")) {
+                        const linker1 = this.linker;
+                        const linker2 = this.getLinkerData(e.target);
+                        if (e.target.classList.contains("linked") && (linker2.isParameter || e.target.classList.contains("execute"))) return;
+                        this.linker = null;
+                        
+                        if (linker1.isParameter == linker2.isParameter) return;
+                        const ret = (linker1.isParameter) ? linker2 : linker1;
+                        const param = (linker1.isParameter) ? linker1 : linker2;
+
+                        const returnNode = this.getNodeByUid(ret.nodeUid);
+                        const returnIndex = ret.index;
+                        const parameterNode = this.getNodeByUid(param.nodeUid);
+                        const parameterIndex = param.index;
+
+                        if (returnNode.data.returns[returnIndex].type != parameterNode.data.parameters[parameterIndex].type) return;
+                        this.app.currentClass.currentMethod.linkNodes(returnNode, returnIndex, parameterNode, parameterIndex);
+                    }
+                    
                     break;
+
+                case 2:
+                    if (!this.grid.moved) this.app.nodeMenu = new NodeMenu(this.app, { x: e.x, y: e.y });
+                    center.method.container.classList.remove("moving");
+                    break;
+
                 default: break;
             }
+            
+            this.grid.click = null; 
+            this.grid.moved = false;
+            this.grid.button = null;
         });
         center.method.container.addEventListener("mousemove", (e) => {
-            if (!this.grid.click) return;
-            center.method.container.classList.add("moving");
-            
-            const rect = this.app.interface.elements.center.method.container.getBoundingClientRect();
-            this.grid.pos.x = e.x - rect.x + this.grid.click.x;
-            this.grid.pos.y = e.y - rect.y + this.grid.click.y;
-            document.documentElement.style.setProperty("--grid-pos-x", `${this.grid.pos.x}px`);
-            document.documentElement.style.setProperty("--grid-pos-y", `${this.grid.pos.y}px`);
+            if (this.grid.click) {
+                switch (this.grid.button) {
+
+                    case 0:
+                        if (this.held.length > 0) {
+                            const cursorPos = this.getCursorPos(e);
+
+                            this.held.forEach((h) => {
+                                h.node.pos.x = cursorPos.x - h.offset.x;
+                                h.node.pos.y = cursorPos.y - h.offset.y;
+                                h.node.updatePos();
+                                this.app.currentClass.currentMethod.getLinksByNodeUID(h.node.element.id).forEach((link) => link.hide());
+                            });
+                            this.app.currentClass.currentMethod.refreshLinks();
+
+                        } else {
+                            if (!this.zone) {
+                                this.zone = document.createElement("div");
+                                this.zone.classList.add("zone");
+                                center.method.nodeContainer.appendChild(this.zone);
+                            }
+
+                            const zoneRect = this.getZoneRect(this.getCursorPos(e));
+                            this.zone.style.width = `${zoneRect.width}px`;
+                            this.zone.style.height = `${zoneRect.height}px`;
+                            this.zone.style.top = `${zoneRect.y}px`;
+                            this.zone.style.left = `${zoneRect.x}px`;
+                        }
+                        break;
+
+                    case 2: 
+                        this.grid.moved = true;
+                        center.method.container.classList.add("moving");
+                        
+                        const cursorPos = this.getCursorPos(e);
+                        this.app.setGridPos({ x: cursorPos.x - this.grid.click.x + this.grid.pos.x, y: cursorPos.y - this.grid.click.y + this.grid.pos.y });
+                        break;
+
+                    default: break;
+                }
+            }
         });
     }
 
@@ -95,5 +252,34 @@ class Events {
             x: offset.x - this.grid.pos.x,
             y: offset.y - this.grid.pos.y,
         }
+    }
+
+    getNodeByElement(element) {
+        let res = null;
+        this.app.currentClass.currentMethod.nodes.forEach((node) => {
+            if (node.element.contains(element)) res = node;
+        });
+        return res;
+    }
+
+    getNodeByUid(uid) {
+        return this.app.currentClass.currentMethod.nodes.filter((n) => n.uid == uid)[0];
+    }
+
+    getZoneRect(cursorPos) {
+        return {
+            x: Math.min(this.grid.click.x, cursorPos.x),
+            y: Math.min(this.grid.click.y, cursorPos.y),
+            width: Math.max(this.grid.click.x, cursorPos.x) - Math.min(this.grid.click.x, cursorPos.x),
+            height: Math.max(this.grid.click.y, cursorPos.y) - Math.min(this.grid.click.y, cursorPos.y),
+        };
+    }
+
+    getLinkerData(element) {
+        if (!element.classList.contains("linker")) return null;
+        const nodeUid = parseInt(element.parentElement.parentElement.parentElement.id);
+        const index = [...element.parentElement.parentElement.children].indexOf(element.parentElement);
+        const isParameter = element.parentElement.parentElement.classList.contains("input-container");
+        return { nodeUid, index, isParameter };
     }
 };

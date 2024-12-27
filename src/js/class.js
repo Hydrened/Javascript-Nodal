@@ -38,6 +38,7 @@ class Class {
 
     openMethod(name, force = false) {
         if (!force) if (this.currentMethod) if (name == this.currentMethod.name) return;
+        if (this.currentMethod) this.currentMethod.close();
         this.currentMethod = this.methods[name];
         this.currentMethod.open();
         this.app.interface.refresh();

@@ -4,6 +4,7 @@ class App {
 
         this.classes = {};
         this.currentClass = null;
+        this.nodeMenu = null;
 
         this.initData().then(() => {
             this.manager = new Manager(this);
@@ -54,6 +55,7 @@ class App {
     }
 
     openClass(name) {
+        if (this.currentClass) this.currentClass.close();
         this.currentClass = this.classes[name];
         this.currentClass.open();
         this.interface.refresh();
@@ -74,5 +76,17 @@ class App {
                 i++;
             }
         } else return type;
+    }
+
+    destroyNodeMenu() {
+        if (!this.nodeMenu) return;
+        this.nodeMenu.destroy();
+        this.nodeMenu = null;
+    }
+
+    setGridPos(pos) {
+        this.events.grid.pos = pos;
+        document.documentElement.style.setProperty("--grid-pos-x", `${this.events.grid.pos.x}px`);
+        document.documentElement.style.setProperty("--grid-pos-y", `${this.events.grid.pos.y}px`);
     }
 };

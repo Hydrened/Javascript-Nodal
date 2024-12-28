@@ -1,24 +1,19 @@
 class SubFrame {
-    constructor() {
+    constructor(app) {
+        this.app = app;
         this.data = [
             {
                 title: "File",
                 submenus: [
                     { title: "Open", shortcut: { title: "Ctrl+O", isValid: (e) => {
                         return (e.ctrlKey && !e.shiftKey && e.key.toUpperCase() == "O");
-                    }}, call: () => {
-                        console.log("open");
-                    }},
+                    }}, call: () => this.openProject() },
                     { title: "Save", shortcut: { title: "Ctrl+S", isValid: (e) => {
                         return (e.ctrlKey && !e.shiftKey && e.key.toUpperCase() == "S");
-                    }}, call: () => {
-                        console.log("save");
-                    }},
+                    }}, call: () => this.saveProject() },
                     { title: "Save as", shortcut: { title: "Ctrl+Shift+S", isValid: (e) => {
                         return (e.ctrlKey && e.shiftKey && e.key.toUpperCase() == "S");
-                    }}, call: () => {
-                        console.log("save as");
-                    }},
+                    }}, call: () => this.saveAsProject() },
                 ],
             },
             {
@@ -26,29 +21,37 @@ class SubFrame {
                 submenus: [
                     { title: "Undo", shortcut: { title: "Ctrl+Z", isValid: (e) => {
                         return (e.ctrlKey && !e.shiftKey && e.key.toUpperCase() == "Z");
-                    }}, call: null },
+                    }}, call: () => this.undo() },
                     { title: "Redo", shortcut: { title: "Ctrl+Y", isValid: (e) => {
                         return (e.ctrlKey && !e.shiftKey && e.key.toUpperCase() == "Y");
-                    }}, call: null },
+                    }}, call: () => this.redo() },
                     { title: "br" },
                     { title: "Copy", shortcut: { title: "Ctrl+C", isValid: (e) => {
                         return (e.ctrlKey && !e.shiftKey && e.key.toUpperCase() == "C");
-                    }}, call: null },
+                    }}, call: () => this.copy() },
                     { title: "Cut", shortcut: { title: "Ctrl+X", isValid: (e) => {
                         return (e.ctrlKey && !e.shiftKey && e.key.toUpperCase() == "X");
-                    }}, call: null },
+                    }}, call: () => this.cut() },
                     { title: "Paste", shortcut: { title: "Ctrl+V", isValid: (e) => {
                         return (e.ctrlKey && !e.shiftKey && e.key.toUpperCase() == "V");
-                    }}, call: null },
+                    }}, call: () => this.paste() },
                     { title: "Duplicate", shortcut: { title: "Ctrl+D", isValid: (e) => {
                         return (e.ctrlKey && !e.shiftKey && e.key.toUpperCase() == "D");
-                    }}, call: null },
+                    }}, call: () => this.duplicate() },
                     { title: "br" },
                     { title: "Remove", shortcut: { title: "Suppr", isValid: (e) => {
-                        return (!e.ctrlKey && !e.shiftKey && (e.key.toUpperCase() == "Backspace" || e.key.toUpperCase() == "Delete"));
-                    }}, call: null },
+                        return (!e.ctrlKey && !e.shiftKey && (e.key.toUpperCase() == "BACKSPACE" || e.key.toUpperCase() == "DELETE"));
+                    }}, call: () => this.remove() },
                 ],
-            }
+            },
+            {
+                title: "Run",
+                submenus: [
+                    { title: "Get code", shortcut: { title: "F5", isValid: (e) => {
+                        return (!e.ctrlKey && !e.shiftKey && e.key.toUpperCase() == "F5");
+                    }}, call: () => this.getCode() },
+                ],
+            },
         ];
         this.elements = {
             container: document.getElementById("sub-frame-menu-container"),
@@ -99,5 +102,59 @@ class SubFrame {
                 if (submenu.shortcut && submenu.call) if (submenu.shortcut.isValid(e)) submenu.call();
             }));
         });
+    }
+
+    update() {
+
+    }
+
+    getFocusedNodes() {
+        return [...this.app.interface.elements.center.method.nodeContainer.querySelectorAll(".node.focused")];
+    }
+
+    openProject() {
+
+    }
+
+    saveProject() {
+
+    }
+
+    saveAsProject() {
+
+    }
+
+    undo() {
+
+    }
+
+    redo() {
+
+    }
+
+    copy() {
+
+    }
+
+    cut() {
+        
+    }
+
+    paste() {
+
+    }
+
+    duplicate() {
+
+    }
+
+    remove() {
+        this.getFocusedNodes().forEach((el) => {
+            this.app.currentClass.currentMethod.removeNode(this.app.events.getNodeByElement(el));
+        });
+    }
+    
+    getCode() {
+        
     }
 };

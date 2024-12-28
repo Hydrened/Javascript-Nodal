@@ -135,4 +135,21 @@ class Method {
             else return acc;
         }, 0);
     }
+
+    removeNode(node) {
+        if (node.id == 0) return this.app.error("Begin node can't be removed");
+
+        this.nodes = this.nodes.filter((n) => n != node);
+        node.hide();
+
+        this.refreshNodes();
+        this.getLinksByNodeUID(node.uid).forEach((link) => this.removeLink(link));
+    }
+
+    removeLink(link) {
+        this.links = this.links.filter((l) => l != link);
+        link.hide();
+
+        this.refreshLinks();
+    }
 };

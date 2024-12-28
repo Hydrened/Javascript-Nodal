@@ -4,12 +4,11 @@ const fsp = require("fs").promises;
 const path = require("path");
 
 window.addEventListener("load", () => {
-    const frame = new Frame();
-    const subFrame = new SubFrame();
-
     ipcRenderer.send("get-main-folder");
     ipcRenderer.on("send-main-folder", (e, mainFolder) => {
         const app = new App(mainFolder);
+        const frame = new Frame();
+        const subFrame = new SubFrame(app);
 
         window.addEventListener("beforeunload", (e) => {
             try {

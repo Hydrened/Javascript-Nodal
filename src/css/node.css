@@ -17,6 +17,10 @@
 .node.focused {
     outline: 3px solid var(--col-1);
     cursor: default;
+    z-index: 10;
+}
+.node.hide {
+    animation: fade-out-from-center 100ms ease-out forwards;
 }
 #node-container:has(.link:hover) > .node {
     opacity: 0.3;

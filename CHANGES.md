@@ -1,3 +1,13 @@
+## HJN-2.0.4
+#### REMAKE
+- node remove
+#### ADDED
+- remove node shortcut
+- animation when hiding node
+## FIXED
+- frame button hitboxes
+- focused nodes on top
+
 ## HJN-2.0.3
 #### REMAKE
 - node menu

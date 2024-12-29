@@ -136,6 +136,12 @@ class Method {
         }, 0);
     }
 
+    getNodesByLink(link) {
+        return this.nodes.filter((node) => {
+            return (node.element.contains(link.parameterLink) || node.element.contains(link.returnLink));
+        });
+    }
+
     removeNode(node) {
         if (node.id == 0) return this.app.error("Begin node can't be removed");
 
@@ -147,6 +153,7 @@ class Method {
     }
 
     removeLink(link) {
+        this.getNodesByLink(link).forEach((node) => this.getLinksByNodeUID(node.uid).forEach((link) => link.hide()));
         this.links = this.links.filter((l) => l != link);
         link.hide();
 

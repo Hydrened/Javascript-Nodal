@@ -1,3 +1,11 @@
+## HJN-2.0.5
+#### ADDED
+- unlink node link
+## FIXED
+- can't open current class
+- linking reset when not successful
+- reset links when removing a link from a node
+
 ## HJN-2.0.4
 #### REMAKE
 - node remove

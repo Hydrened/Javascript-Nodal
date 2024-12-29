@@ -55,7 +55,10 @@ class App {
     }
 
     openClass(name) {
-        if (this.currentClass) this.currentClass.close();
+        if (this.currentClass) {
+            if (this.currentClass.name == name) return;
+            this.currentClass.close();
+        }
         this.currentClass = this.classes[name];
         this.currentClass.open();
         this.interface.refresh();

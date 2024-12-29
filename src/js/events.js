@@ -76,8 +76,6 @@ class Events {
                     const cursorPos = this.getCursorPos(e);
 
                     if (clickedNode) {
-                        const nodeRect = clickedNode.getRect();
-
                         if (!e.target.classList.contains("linker")) {
                             if (e.target.tagName == "HEADER") {
                                 if (!clickedNode.element.classList.contains("focused")) {
@@ -95,6 +93,7 @@ class Events {
                             }
     
                             clickedNode.element.classList.add("focused");
+                            const nodeRect = clickedNode.getRect();
                             if (this.held.filter((h) => h.node == clickedNode).length == 0) this.held.push({
                                 node: clickedNode,
                                 offset: {
@@ -102,7 +101,13 @@ class Events {
                                     y: cursorPos.y - nodeRect.y,
                                 },
                             });
-                        } else this.linker = this.getLinkerData(e.target);
+                        } else {
+                            if (e.altKey) {
+                                this.app.currentClass.currentMethod.getLinksByNodeUID(clickedNode.uid).filter((link) => {
+                                    return (link.parameterLink == e.target || link.returnLink == e.target);
+                                }).forEach((link) => this.app.currentClass.currentMethod.removeLink(link));
+                            } else this.linker = this.getLinkerData(e.target);
+                        }
 
                     } else {
                         [...center.method.nodeContainer.children].forEach((node) => node.classList.remove("focused"));
@@ -168,7 +173,6 @@ class Events {
                         const linker1 = this.linker;
                         const linker2 = this.getLinkerData(e.target);
                         if (e.target.classList.contains("linked") && (linker2.isParameter || e.target.classList.contains("execute"))) return;
-                        this.linker = null;
                         
                         if (linker1.isParameter == linker2.isParameter) return;
                         const ret = (linker1.isParameter) ? linker2 : linker1;
@@ -182,6 +186,7 @@ class Events {
                         if (returnNode.data.returns[returnIndex].type != parameterNode.data.parameters[parameterIndex].type) return;
                         this.app.currentClass.currentMethod.linkNodes(returnNode, returnIndex, parameterNode, parameterIndex);
                     }
+                    this.linker = null;
                     
                     break;
 
@@ -238,6 +243,20 @@ class Events {
 
                     default: break;
                 }
+            } else if (this.linker) {
+                // link following mouse
+            }
+        });
+        center.method.container.addEventListener("mouseleave", (e) => {
+            if (!this.grid.click) return;
+            if (this.grid.moved) return;
+            
+            if (this.zone) {
+                this.zone.remove();
+                this.zone = null;
+                this.grid.click = null;
+                this.grid.button = null;
+                this.grid.moved = false;
             }
         });
     }

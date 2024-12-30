@@ -1,3 +1,11 @@
+## HJN-2.0.6
+#### ADDED
+- node movement with arrows
+## FIXED
+- app not launching
+- node minimum size
+- node teleporting when moving
+
 ## HJN-2.0.5
 #### ADDED
 - unlink node link

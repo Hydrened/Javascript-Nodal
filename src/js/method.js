@@ -159,4 +159,26 @@ class Method {
 
         this.refreshLinks();
     }
+
+    moveFocusedNodes(velocity) {
+        [...this.app.interface.elements.center.method.nodeContainer.querySelectorAll(".node.focused")].forEach((el) => {
+            const node = this.getNodeByElement(el);
+            node.pos.x += velocity.x;
+            node.pos.y += velocity.y;
+            node.snap();
+            node.updatePos();
+        });
+    }
+
+    getNodeByUid(uid) {
+        return this.nodes.filter((n) => n.uid == uid)[0];
+    }
+
+    getNodeByElement(element) {
+        let res = null;
+        this.app.currentClass.currentMethod.nodes.forEach((node) => {
+            if (node.element.contains(element)) res = node;
+        });
+        return res;
+    }
 };

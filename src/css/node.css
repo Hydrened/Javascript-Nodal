@@ -1,5 +1,5 @@
 .node {
-    min-width: calc(var(--secondary-grid-size) * 10);
+    min-width: calc(10rem);
     position: absolute;
     display: grid;
     grid-template-columns: repeat(2, auto);

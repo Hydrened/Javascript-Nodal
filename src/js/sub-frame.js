@@ -150,7 +150,7 @@ class SubFrame {
 
     remove() {
         this.getFocusedNodes().forEach((el) => {
-            this.app.currentClass.currentMethod.removeNode(this.app.events.getNodeByElement(el));
+            this.app.currentClass.currentMethod.removeNode(this.app.currentClass.currentMethod.getNodeByElement(el));
         });
     }
     

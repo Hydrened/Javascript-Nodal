@@ -5,7 +5,7 @@ const path = require("path");
 class Application {
     constructor() {
         const roaming = app.getPath("appData");
-        this.mainFolder = path.join(roaming, "Nodal", "data");
+        this.mainFolder = path.join(roaming, "Javascript Nodal", "data");
 
         this.initMainFolder();
         this.window = this.createWindow();

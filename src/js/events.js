@@ -23,8 +23,15 @@ class Events {
         document.addEventListener("contextmenu", (e) => e.preventDefault());
 
         document.addEventListener("keydown", (e) => {
+            const root = getComputedStyle(document.documentElement);
+            const secondaryGridSize = parseFloat(root.getPropertyValue("--main-grid-size").slice(0, -2)) / root.getPropertyValue("--main-grid-units");
+
             switch (e.key) {
                 case "Escape": this.app.destroyNodeMenu(); break;
+                case "ArrowUp": this.app.currentClass.currentMethod.moveFocusedNodes({ x: 0, y: -secondaryGridSize }); break;
+                case "ArrowDown": this.app.currentClass.currentMethod.moveFocusedNodes({ x: 0, y: secondaryGridSize }); break;
+                case "ArrowLeft": this.app.currentClass.currentMethod.moveFocusedNodes({ x: -secondaryGridSize, y: 0 }); break;
+                case "ArrowRight": this.app.currentClass.currentMethod.moveFocusedNodes({ x: secondaryGridSize, y: 0 }); break;
                 default: break;
             }
         });
@@ -72,7 +79,7 @@ class Events {
             switch (e.button) {
 
                 case 0:
-                    const clickedNode = this.getNodeByElement(e.target);
+                    const clickedNode = this.app.currentClass.currentMethod.getNodeByElement(e.target);
                     const cursorPos = this.getCursorPos(e);
 
                     if (clickedNode) {
@@ -88,11 +95,11 @@ class Events {
                                     h.offset.y *= -1;
                                 });
     
+                                clickedNode.element.classList.add("focused");
                                 this.grid.click = cursorPos;
                                 this.grid.button = 0;
                             }
     
-                            clickedNode.element.classList.add("focused");
                             const nodeRect = clickedNode.getRect();
                             if (this.held.filter((h) => h.node == clickedNode).length == 0) this.held.push({
                                 node: clickedNode,
@@ -178,9 +185,9 @@ class Events {
                         const ret = (linker1.isParameter) ? linker2 : linker1;
                         const param = (linker1.isParameter) ? linker1 : linker2;
 
-                        const returnNode = this.getNodeByUid(ret.nodeUid);
+                        const returnNode = this.app.currentClass.currentMethod.getNodeByUid(ret.nodeUid);
                         const returnIndex = ret.index;
-                        const parameterNode = this.getNodeByUid(param.nodeUid);
+                        const parameterNode = this.app.currentClass.currentMethod.getNodeByUid(param.nodeUid);
                         const parameterIndex = param.index;
 
                         if (returnNode.data.returns[returnIndex].type != parameterNode.data.parameters[parameterIndex].type) return;
@@ -271,18 +278,6 @@ class Events {
             x: offset.x - this.grid.pos.x,
             y: offset.y - this.grid.pos.y,
         }
-    }
-
-    getNodeByElement(element) {
-        let res = null;
-        this.app.currentClass.currentMethod.nodes.forEach((node) => {
-            if (node.element.contains(element)) res = node;
-        });
-        return res;
-    }
-
-    getNodeByUid(uid) {
-        return this.app.currentClass.currentMethod.nodes.filter((n) => n.uid == uid)[0];
     }
 
     getZoneRect(cursorPos) {

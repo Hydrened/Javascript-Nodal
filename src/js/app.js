@@ -40,7 +40,7 @@ class App {
     }
 
     createClass(name) {
-        this.manager.create(this.classes, name, "Main", "class", () => {
+        this.manager.create(this.classes, name, "Main", "class", null, () => {
             this.classes[name] = new Class(this, name);
             this.openClass(name);
         });
@@ -51,7 +51,7 @@ class App {
     }
 
     renameClass(oldName, newName) {
-        return this.manager.rename(this.classes, oldName, newName, "Class");
+        return this.manager.rename(this.classes, oldName, newName, "Class", ["new instance"]);
     }
 
     openClass(name) {

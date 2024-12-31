@@ -1,3 +1,10 @@
+## HJN-2.0.7
+#### ADDED
+- node updating when renaming class, method, class variable and local variables
+- new instance nodes updating when creating a class parameter
+## REMOVED
+- node hide animation
+
 ## HJN-2.0.6
 #### ADDED
 - node movement with arrows

@@ -3,13 +3,36 @@ class Manager {
         this.app = app;
     }
 
-    create(array, name, exception, type, then) {
+    create(array, name, exception, displayType, nodeTypes, then) {
         if (!Array.isArray(array)) array = Object.keys(array);
         if (!array.includes(name)) {
             if (then) then();
-            if (name != exception) this.app.success(`Successfully created ${type} "${name}"`);
+            if (name != exception) this.app.success(`Successfully created ${displayType} "${name}"`);
+
+            if (this.app.currentClass) {
+                const method = this.app.currentClass.currentMethod;
+                
+                if (nodeTypes) Object.values(this.app.classes).forEach((c) => Object.values(c.methods).forEach((m) => m.nodes.filter((node) => nodeTypes.includes(node.data.type)).forEach((node) => {
+                    const isParameter = displayType.toLowerCase().includes("parameter");
+                    if (isParameter) {
+                        node.data.parameters.push({
+                            title: name,
+                            type: "variable",
+                        });
+                    } else {
+
+                    }
+                    method.getLinksByNodeUID(node.uid).forEach((link) => link.hide());
+                    node.hide();
+                })));
+
+                method.refreshNodes();
+                setTimeout(() => method.refreshLinks(), 200);
+            }
+            
+
             setTimeout(() => this.app.interface.refresh(), 0);
-        } else this.app.error(`A ${type} is already named "${name}"`);
+        } else this.app.error(`A ${displayType} is already named "${name}"`);
     }
 
     remove(array, name) {
@@ -19,22 +42,27 @@ class Manager {
         this.app.interface.refresh();
     }
 
-    rename(array, oldName, newName, type) {
+    rename(array, oldName, newName, displayType, nodeTypes) {
         const isArray = Array.isArray(array);
         if (oldName == newName || newName == "") return;
         const arrCopy = (!isArray) ? Object.keys(array) : array;
-        if (arrCopy.includes(newName)) return this.app.error(`${type} named "${newName}" already exist`);
+        if (arrCopy.includes(newName)) return this.app.error(`${displayType} named "${newName}" already exist`);
 
         if (!isArray) {
             array[newName] = array[oldName];
-            if (!type.toLowerCase().includes("variable")) array[newName].name = newName;
+            if (!displayType.toLowerCase().includes("variable")) array[newName].name = newName;
             delete array[oldName];
         } else array[array.indexOf(oldName)] = newName;
 
-        // node update
+        Object.values(this.app.classes).forEach((c) => Object.values(c.methods).forEach((method) => method.nodes.filter((node) => nodeTypes.includes(node.data.type)).forEach((node) => {
+            node.data.title = node.data.title.replace(oldName, newName);
+            node.data.returns.at(-1).title = node.data.returns.at(-1).title.replace(oldName, newName);
+            node.hide();
+        })));
+        this.app.currentClass.currentMethod.refreshNodes();
 
         this.app.currentClass.openMethod(this.app.currentClass.currentMethod.name, true);
         this.app.interface.refresh();
-        return this.app.success(`Successfully renamed ${type.toLowerCase()} "${oldName}" to "${newName}"`);
+        return this.app.success(`Successfully renamed ${displayType.toLowerCase()} "${oldName}" to "${newName}"`);
     }
 };

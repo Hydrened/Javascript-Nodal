@@ -63,7 +63,7 @@ class Node {
         if (this.app.currentClass.currentMethod != this.method) return;
         this.element.classList.add("hide");
         this.displayed = false;
-        setTimeout(() => this.element.remove(), 100);
+        this.element.remove();
     }
 
     snap() {

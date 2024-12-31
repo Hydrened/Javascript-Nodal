@@ -56,7 +56,7 @@ class Interface {
                 change: (oldName, newName) => this.app.renameClass(oldName, newName),
                 click: (name) => this.app.openClass(name),
                 confirmRemove: {
-                    message: (name) => `Are you sure you wan to remove class "${name}"?`,
+                    message: (name) => `Are you sure you want to remove class "${name}"?`,
                     options: (name) => [
                         { button: "Yes", call: () => {
                             this.app.removeClass(name);
@@ -76,7 +76,7 @@ class Interface {
                 change: (oldName, newName) => this.app.currentClass.renameMethod(oldName, newName),
                 click: (name) => this.app.currentClass.openMethod(name),
                 confirmRemove: {
-                    message: (name) => `Are you sure you wan to remove method "${name}" from ${this.app.currentClass.name}?`,
+                    message: (name) => `Are you sure you want to remove method "${name}" from ${this.app.currentClass.name}?`,
                     options: (name) => [
                         { button: "Yes", call: () => {
                             this.app.currentClass.removeMethod(name);
@@ -96,7 +96,7 @@ class Interface {
                 change: (oldName, newName) => this.app.currentClass.renameVariable(oldName, newName),
                 click: null,
                 confirmRemove: {
-                    message: (name) => `Are you sure you wan to remove variable "${name}" from ${this.app.currentClass.name}?`,
+                    message: (name) => `Are you sure you want to remove variable "${name}" from ${this.app.currentClass.name}?`,
                     options: (name) => [
                         { button: "Yes", call: () => {
                             this.app.currentClass.removeVariable(name);
@@ -116,7 +116,7 @@ class Interface {
                 change: (oldName, newName) => this.app.currentClass.currentMethod.renameLocalVariable(oldName, newName),
                 click: null,
                 confirmRemove: {
-                    message: (name) => `Are you sure you wan to remove local variable "${name}" from ${this.app.currentClass.currentMethod.name}?`,
+                    message: (name) => `Are you sure you want to remove local variable "${name}" from ${this.app.currentClass.currentMethod.name}?`,
                     options: (name) => [
                         { button: "Yes", call: () => {
                             this.app.currentClass.currentMethod.removeLocalVariable(name);
@@ -152,7 +152,7 @@ class Interface {
                 change: (oldName, newName) => this.app.currentClass.renameParameter(oldName, newName),
                 click: null,
                 confirmRemove: {
-                    message: (name) => `Are you sure you wan to remove class parameter "${name}" from ${this.app.currentClass.name}?`,
+                    message: (name) => `Are you sure you want to remove class parameter "${name}" from ${this.app.currentClass.name}?`,
                     options: (name) => [
                         { button: "Yes", call: () => {
                             this.app.currentClass.removeParameter(name);
@@ -184,7 +184,7 @@ class Interface {
                 change: (oldName, newName) => this.app.currentClass.currentMethod.renameParameter(oldName, newName),
                 click: null,
                 confirmRemove: {
-                    message: (name) => `Are you sure you wan to remove method parameter "${name}" from ${this.app.currentClass.currentMethod.name}?`,
+                    message: (name) => `Are you sure you want to remove method parameter "${name}" from ${this.app.currentClass.currentMethod.name}?`,
                     options: (name) => [
                         { button: "Yes", call: () => {
                             this.app.currentClass.currentMethod.removeParameter(name);
@@ -204,7 +204,7 @@ class Interface {
                 change: (oldName, newName) => this.app.currentClass.currentMethod.renameReturn(oldName, newName),
                 click: null,
                 confirmRemove: {
-                    message: (name) => `Are you sure you wan to remove method return "${name}" from ${this.app.currentClass.currentMethod.name}?`,
+                    message: (name) => `Are you sure you want to remove method return "${name}" from ${this.app.currentClass.currentMethod.name}?`,
                     options: (name) => [
                         { button: "Yes", call: () => {
                             this.app.currentClass.currentMethod.removeReturn(name);

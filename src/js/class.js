@@ -21,7 +21,7 @@ class Class {
     }
 
     createMethod(name) {
-        this.app.manager.create(this.methods, name, "Constructor", "method", () => {
+        this.app.manager.create(this.methods, name, "Constructor", "method", null, () => {
             this.methods[name] = new Method(this.app, this, name);
             this.openMethod(name);
         });
@@ -33,7 +33,7 @@ class Class {
     }
 
     renameMethod(oldName, newName) {
-        return this.app.manager.rename(this.methods, oldName, newName, "Method");
+        return this.app.manager.rename(this.methods, oldName, newName, "Method", ["method"]);
     }
 
     openMethod(name, force = false) {
@@ -45,7 +45,7 @@ class Class {
     }
 
     createVariable(name) {
-        this.app.manager.create(this.variables, name, null, "variable", () => {
+        this.app.manager.create(this.variables, name, null, "variable", null, () => {
             this.variables[name] = undefined;
         });
     }
@@ -55,11 +55,11 @@ class Class {
     }
 
     renameVariable(oldName, newName) {
-        return this.app.manager.rename(this.variables, oldName, newName, "Variable");
+        return this.app.manager.rename(this.variables, oldName, newName, "Class variable", ["class variable"]);
     }
 
     createParameter(name) {
-        this.app.manager.create(this.parameters, name, null, "parameter", () => {
+        this.app.manager.create(this.parameters, name, null, "class parameter", ["new instance"], () => {
             this.parameters.push(name);
         });
     }
@@ -69,7 +69,7 @@ class Class {
     }
 
     renameParameter(oldName, newName) {
-        return this.app.manager.rename(this.parameters, oldName, newName, "Parameter");
+        return this.app.manager.rename(this.parameters, oldName, newName, "Parameter", ["class parameter", "new instance"]);
     }
 
     setVariableValue(name, value) {

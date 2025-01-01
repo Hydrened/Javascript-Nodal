@@ -58,6 +58,7 @@ class SubFrame {
         };
 
         this.hoverActivated = false;
+        this.absCursorPos = { x: 0, y: 0 };
 
         this.createMenu();
         this.handleEvents();
@@ -102,6 +103,8 @@ class SubFrame {
                 if (submenu.shortcut && submenu.call) if (submenu.shortcut.isValid(e)) submenu.call();
             }));
         });
+
+        document.addEventListener("mousemove", (e) => this.absCursorPos = { x: e.x, y: e.y });
     }
 
     update() {
@@ -112,15 +115,15 @@ class SubFrame {
         return [...this.app.interface.elements.center.method.nodeContainer.querySelectorAll(".node.focused")];
     }
 
-    openProject() {
+    open() {
 
     }
 
-    saveProject() {
+    save() {
 
     }
 
-    saveAsProject() {
+    saveAs() {
 
     }
 
@@ -133,15 +136,24 @@ class SubFrame {
     }
 
     copy() {
-
+        const method = this.app.currentClass.currentMethod;
+        const nodes = this.getFocusedNodes().map((el) => method.getNodeByElement(el)).filter((node) => node.uid > 0);
+        if (nodes.length == 0) return;
+        const nodePositions = nodes.map((node) => node.pos);
+        const minX = nodePositions.map((pos) => pos.x).sort().at(0);
+        const minY = nodePositions.map((pos) => pos.y).sort().at(0);
+        method.copyNodes(nodes, { x: minX, y: minY });
     }
 
     cut() {
-        
+        const method = this.app.currentClass.currentMethod;
+        this.copy();
+        this.getFocusedNodes().forEach((el) => method.removeNode(method.getNodeByElement(el)));
     }
 
     paste() {
-
+        const method = this.app.currentClass.currentMethod;
+        method.pasteNodes(this.app.events.getCursorPos(this.absCursorPos));
     }
 
     duplicate() {
@@ -149,9 +161,8 @@ class SubFrame {
     }
 
     remove() {
-        this.getFocusedNodes().forEach((el) => {
-            this.app.currentClass.currentMethod.removeNode(this.app.currentClass.currentMethod.getNodeByElement(el));
-        });
+        const method = this.app.currentClass.currentMethod;
+        this.getFocusedNodes().forEach((el) => method.removeNode(method.getNodeByElement(el)));
     }
     
     getCode() {

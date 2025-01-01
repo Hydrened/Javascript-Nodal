@@ -1,3 +1,9 @@
+## HJN-2.0.8
+#### ADDED
+- copy, cut and paste nodes
+#### FIXED
+- link update when moving node with arrows
+
 ## HJN-2.0.7
 #### ADDED
 - node updating when renaming class, method, class variable and local variables
@@ -8,7 +14,7 @@
 ## HJN-2.0.6
 #### ADDED
 - node movement with arrows
-## FIXED
+#### FIXED
 - app not launching
 - node minimum size
 - node teleporting when moving
@@ -16,7 +22,7 @@
 ## HJN-2.0.5
 #### ADDED
 - unlink node link
-## FIXED
+#### FIXED
 - can't open current class
 - linking reset when not successful
 - reset links when removing a link from a node
@@ -27,7 +33,7 @@
 #### ADDED
 - remove node shortcut
 - animation when hiding node
-## FIXED
+#### FIXED
 - frame button hitboxes
 - focused nodes on top
 
@@ -42,7 +48,7 @@
 - method parameter to node menu
 - local variables to node menu
 - node menu context sensivity
-## FIXED
+#### FIXED
 - node menu y overflow
 - destroy context menu when updating window
 - window's minimum size

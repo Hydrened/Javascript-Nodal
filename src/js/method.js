@@ -12,6 +12,7 @@ class Method {
 
         this.nodes = [];
         this.links = [];
+        this.clipboard = null;
 
         setTimeout(() => this.createNode({ x: 0, y: 0 }, 0), 0, null);
     }
@@ -25,6 +26,7 @@ class Method {
     close() {
         this.nodes.forEach((node) => node.hide());
         this.links.forEach((link) => link.hide());
+        this.clipboard = null;
     }
 
     createLocalVariable(name) {
@@ -167,6 +169,9 @@ class Method {
             node.pos.y += velocity.y;
             node.snap();
             node.updatePos();
+
+            this.getLinksByNodeUID(node.uid).forEach((link) => link.hide());
+            this.refreshLinks();
         });
     }
 
@@ -180,5 +185,39 @@ class Method {
             if (node.element.contains(element)) res = node;
         });
         return res;
+    }
+
+    copyNodes(nodes, offset) {
+        this.clipboard = {
+            nodes: nodes,
+            offset: { x: offset.x, y: offset.y },
+        };
+    }
+
+    pasteNodes(cursorPos) {
+        if (!this.clipboard) return;
+        this.clipboard.nodes.forEach((node) => {
+            const pos = { x: node.pos.x + cursorPos.x - this.clipboard.offset.x, y: node.pos.y + cursorPos.y - this.clipboard.offset.y };
+            this.createNode(pos, node.id, node.data);
+            
+            const newNode = this.nodes.at(-1);
+            [...node.element.querySelectorAll("input")].forEach((input, index) => {
+                [...newNode.element.querySelectorAll("input")][index].value = input.value;
+            });
+
+            this.getLinksByNodeUID(node.uid).forEach((link) => {
+                const parameterNodeUID = link.data.parameterNode.uid;
+                const returnNodeUID = link.data.returnNode.uid;
+                const parameterNodeIndex = link.data.parameterNode.index;
+                const returnNodeIndex = link.data.returnNode.index;
+
+                const nodeUIDS = this.clipboard.nodes.map((node) => node.uid);
+                if (nodeUIDS.includes(parameterNodeUID) && nodeUIDS.includes(returnNodeUID)) {
+                    console.log(returnNodeIndex, parameterNodeIndex);
+                    
+                    this.linkNodes(this.getNodeByUid(returnNodeUID), returnNodeIndex, this.getNodeByUid(parameterNodeUID), parameterNodeIndex);
+                }
+            });
+        });
     }
 };

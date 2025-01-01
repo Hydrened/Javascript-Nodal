@@ -119,7 +119,6 @@ class Events {
                     } else {
                         [...center.method.nodeContainer.children].forEach((node) => node.classList.remove("focused"));
                         this.held = [];
-                        
                         this.grid.click = cursorPos;
                         this.grid.button = 0;
                     }

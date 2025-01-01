@@ -29,7 +29,6 @@ class Manager {
                 method.refreshNodes();
                 setTimeout(() => method.refreshLinks(), 200);
             }
-            
 
             setTimeout(() => this.app.interface.refresh(), 0);
         } else this.app.error(`A ${displayType} is already named "${name}"`);

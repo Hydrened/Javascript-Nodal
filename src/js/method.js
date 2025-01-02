@@ -196,28 +196,37 @@ class Method {
 
     pasteNodes(cursorPos) {
         if (!this.clipboard) return;
+        
+        const links = [];
+        const newNodes = [];
+
         this.clipboard.nodes.forEach((node) => {
             const pos = { x: node.pos.x + cursorPos.x - this.clipboard.offset.x, y: node.pos.y + cursorPos.y - this.clipboard.offset.y };
             this.createNode(pos, node.id, node.data);
             
             const newNode = this.nodes.at(-1);
+            newNodes.push(newNode);
             [...node.element.querySelectorAll("input")].forEach((input, index) => {
                 [...newNode.element.querySelectorAll("input")][index].value = input.value;
             });
 
             this.getLinksByNodeUID(node.uid).forEach((link) => {
-                const parameterNodeUID = link.data.parameterNode.uid;
-                const returnNodeUID = link.data.returnNode.uid;
-                const parameterNodeIndex = link.data.parameterNode.index;
-                const returnNodeIndex = link.data.returnNode.index;
-
-                const nodeUIDS = this.clipboard.nodes.map((node) => node.uid);
-                if (nodeUIDS.includes(parameterNodeUID) && nodeUIDS.includes(returnNodeUID)) {
-                    console.log(returnNodeIndex, parameterNodeIndex);
-                    
-                    this.linkNodes(this.getNodeByUid(returnNodeUID), returnNodeIndex, this.getNodeByUid(parameterNodeUID), parameterNodeIndex);
-                }
+                if (!links.some((l) => l.uid == link.uid)) links.push(link);
             });
+        });
+        
+        links.forEach((link) => {
+            const parameterNodeIndex = link.data.parameterNode.index;
+            const returnNodeIndex = link.data.returnNode.index;
+            
+            const oldParameterNodeIndex = this.clipboard.nodes.indexOf(this.clipboard.nodes.filter((node) => node.uid == link.data.parameterNode.uid)[0]);
+            const oldReturnNodeIndex = this.clipboard.nodes.indexOf(this.clipboard.nodes.filter((node) => node.uid == link.data.returnNode.uid)[0]);
+            
+            const parameterNode = newNodes[oldParameterNodeIndex];
+            const returnNode = newNodes[oldReturnNodeIndex];
+
+            if (!parameterNode || !returnNode) return;
+            setTimeout(() => this.linkNodes(returnNode, returnNodeIndex, parameterNode, parameterNodeIndex), 200);
         });
     }
 };

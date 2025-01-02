@@ -1,3 +1,7 @@
+## HJN-2.0.9
+#### ADDED
+- link copy when copying nodes
+
 ## HJN-2.0.8
 #### ADDED
 - copy, cut and paste nodes

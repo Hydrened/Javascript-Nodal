@@ -36,7 +36,7 @@ class Method {
     }
 
     removeLocalVariable(name) {
-        this.app.manager.remove(this.localVariables, name, ["local variable"]);
+        this.app.manager.remove(this.localVariables, name, ["local variable"], null);
     }
 
     renameLocalVariable(oldName, newName) {
@@ -50,7 +50,7 @@ class Method {
     }
 
     removeParameter(name) {
-        this.app.manager.remove(this.parameters, name);
+        this.app.manager.remove(this.parameters, name, null);
     }
 
     renameParameter(oldName, newName) {
@@ -64,7 +64,7 @@ class Method {
     }
 
     removeReturn(name) {
-        this.app.manager.remove(this.returns, name);
+        this.app.manager.remove(this.returns, name, null);
     }
 
     renameReturn(oldName, newName) {
@@ -80,6 +80,15 @@ class Method {
     setPure(value) {
         if (this.name == "Constructor") return;
         this.pure = value;
+        Object.values(this.app.classes).forEach((c) => Object.values(c.methods).forEach((method) => method.nodes.filter((node) => node.data.title == this.name).forEach((node) => {
+            node.pure = value;
+            const links = this.getLinksByNodeUID(node.uid);
+            if (node.pure) links.forEach((link) => this.removeLink(link));
+            else links.forEach((link) => link.hide());
+            node.hide();
+        })));
+        this.refreshNodes();
+        setTimeout(() => this.refreshLinks(), 200);
     }
 
     createNode(pos, id, data) {

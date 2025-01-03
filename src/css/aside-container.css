@@ -53,6 +53,9 @@
     display: flex;
     flex-direction: column;
 }
+.aside-container > article ul > li:has(ul.disabled) {
+    display: none;
+}
 .aside-container > article ul > li:not(:has(div.details)) {
     height: 26px;
     display: flex;

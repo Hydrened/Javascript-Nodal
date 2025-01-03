@@ -55,8 +55,14 @@ class Node {
             li.appendChild(input);
         }
 
-        this.data.parameters.forEach((param) => createLi(param, inputContainer, true));
-        this.data.returns.forEach((ret) => createLi(ret, outputContainer, false));
+        this.data.parameters.forEach((param) => {
+            if (param.type == "execute" && this.pure) return;
+            createLi(param, inputContainer, true);
+        });
+        this.data.returns.forEach((ret) => {
+            if (ret.type == "execute" && this.pure) return;
+            createLi(ret, outputContainer, false);
+        });
     }
 
     hide() {

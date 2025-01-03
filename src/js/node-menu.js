@@ -94,7 +94,7 @@ class NodeMenu {
             const classParameters = classValue.parameters.map((p) => { return { type: "variable", title: p }; });
 
             // INSTANCES OF ALL CLASSES
-            nodes.push([getNextId(nodes.map((n) => n[0])), {
+            if (className != "Main") nodes.push([getNextId(nodes.map((n) => n[0])), {
                 title: `New Instance of ${className}`,
                 from: "",
                 type: "new instance",
@@ -123,7 +123,7 @@ class NodeMenu {
                 const currentMethodName = this.app.currentClass.currentMethod.name;
                 if (methodName == currentMethodName && className == currentClassName) {
                     // ALL CURRENT METHOD PARAMETERS
-                    methodValue.parameters.forEach((p) => {
+                    if (methodName != "Constructor") methodValue.parameters.forEach((p) => {
                         addVariable(nodes, p, currentMethodName, "method parameter");
                     });
 

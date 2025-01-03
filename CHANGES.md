@@ -1,3 +1,14 @@
+## HJN-2.0.11
+#### ADDED
+- new instance nodes update when removing a class parameter
+- updating node's links when checking pure
+#### FIXED
+- main class wan't have parameters
+- constructor can't have parameters or returns
+- can't create new instances of main class
+- shortcut are now disabled when at least one input is focused
+- auto opening main class when removing current class
+
 ## HJN-2.0.10
 #### ADDED
 - shortcuts for confirm modals

@@ -138,9 +138,17 @@ class Interface {
         removeChildren(right.methodParameters);
         removeChildren(right.methodReturns);
         removeChildren(right.methodVariables);
+        right.classParameters.classList.remove("disabled");
+        right.methodParameters.classList.remove("disabled");
+        right.methodReturns.classList.remove("disabled");
         right.methodPureCheckbox.removeAttribute("disabled");
 
-        if (this.app.currentClass.currentMethod.name == "Constructor") right.methodPureCheckbox.setAttribute("disabled", "disabled");
+        if (this.app.currentClass.name == "Main") right.classParameters.classList.add("disabled");
+        if (this.app.currentClass.currentMethod.name == "Constructor") {
+            right.methodPureCheckbox.setAttribute("disabled", "disabled");
+            right.methodParameters.classList.add("disabled");
+            right.methodReturns.classList.add("disabled");
+        }
         right.methodPureCheckbox.checked = this.app.currentClass.currentMethod.pure;
 
         this.refreshList({

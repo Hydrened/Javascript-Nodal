@@ -99,6 +99,7 @@ class SubFrame {
 
     handleEvents() {
         document.addEventListener("keydown", (e) => {
+            if (document.querySelectorAll("input:focus").length > 0) return;
             this.data.forEach((menu) => menu.submenus.forEach((submenu) => {
                 if (submenu.shortcut && submenu.call) if (submenu.shortcut.isValid(e)) submenu.call();
             }));

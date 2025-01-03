@@ -1,11 +1,11 @@
 class Confirm {
     constructor(message, options) {
-        const antiClick = document.createElement("div");
-        antiClick.classList.add("anti-click");
-        document.body.appendChild(antiClick);
+        this.antiClick = document.createElement("div");
+        this.antiClick.classList.add("anti-click");
+        document.body.appendChild(this.antiClick);
 
         const popup = document.createElement("div");
-        antiClick.appendChild(popup);
+        this.antiClick.appendChild(popup);
 
         const mes = document.createElement("h3");
         mes.textContent = message;
@@ -21,9 +21,24 @@ class Confirm {
 
             button.addEventListener("click", () => {
                 if (option.call) option.call();
-                antiClick.remove();
-                delete this;
+                this.close();
             });
         });
+
+        window.addEventListener("keydown", (e) => {
+            switch (e.key) {
+                case "Escape": this.close(); break;
+                case "Enter": if (options.length > 0) if (options[0].call) {
+                    options[0].call();
+                    this.close();
+                } break;
+                default: break;
+            }
+        });
+    }
+
+    close() {
+        this.antiClick.remove();
+        delete this;
     }
 };

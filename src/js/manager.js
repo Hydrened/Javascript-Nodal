@@ -34,10 +34,15 @@ class Manager {
         } else this.app.error(`A ${displayType} is already named "${name}"`);
     }
 
-    remove(array, name) {
+    remove(array, name, nodeTypes) {
         if (Array.isArray(array)) array.splice(array.indexOf(name), 1);
         else delete array[name];
-        // node suppresion
+
+        Object.values(this.app.classes).forEach((c) => Object.values(c.methods).forEach((method) => {
+            method.nodes.filter((node) => nodeTypes.includes(node.data.type)).forEach((node) => method.removeNode(node));
+            
+        }));
+
         this.app.interface.refresh();
     }
 

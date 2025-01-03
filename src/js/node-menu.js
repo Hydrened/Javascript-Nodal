@@ -77,10 +77,13 @@ class NodeMenu {
                 title: `Set ${name}`,
                 from: from,
                 type: type,
-                parameters: [{ type: "execute", title: "" }],
+                parameters: [
+                    { type: "execute", title: "" },
+                    { type: "variable", title: "" },
+                ],
                 returns: [
                     { type: "execute", title: "" },
-                    { type: "variable", title: name }
+                    { type: "variable", title: name },
                 ],
             }]);
         }

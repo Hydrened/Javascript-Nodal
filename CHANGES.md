@@ -1,3 +1,10 @@
+## HJN-2.0.10
+#### ADDED
+- shortcuts for confirm modals
+- remove concerned nodes when removing a class, a method, a class variable or a local variable
+#### FIXED
+- value parameter for setting a variable
+
 ## HJN-2.0.9
 #### ADDED
 - link copy when copying nodes

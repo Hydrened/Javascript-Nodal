@@ -29,7 +29,9 @@ class Class {
 
     removeMethod(name) {
         if (this.currentMethod.name == name) this.openMethod("Constructor");
-        this.app.manager.remove(this.methods, name);
+        const method = this.methods[name];
+        Object.keys(method.localVariables).forEach((localVariable) => method.removeLocalVariable(localVariable));
+        this.app.manager.remove(this.methods, name, ["method"]);
     }
 
     renameMethod(oldName, newName) {
@@ -51,7 +53,7 @@ class Class {
     }
 
     removeVariable(name) {
-        this.app.manager.remove(this.variables, name);
+        this.app.manager.remove(this.variables, name, ["class variable"]);
     }
 
     renameVariable(oldName, newName) {
@@ -65,7 +67,7 @@ class Class {
     }
 
     removeParameter(name) {
-        this.app.manager.remove(this.parameters, name);
+        this.app.manager.remove(this.parameters, name, ["class parameter"]);
     }
 
     renameParameter(oldName, newName) {

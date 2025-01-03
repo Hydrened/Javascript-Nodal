@@ -36,7 +36,7 @@ class Method {
     }
 
     removeLocalVariable(name) {
-        this.app.manager.remove(this.localVariables, name);
+        this.app.manager.remove(this.localVariables, name, ["local variable"]);
     }
 
     renameLocalVariable(oldName, newName) {

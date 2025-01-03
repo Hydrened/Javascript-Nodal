@@ -47,7 +47,10 @@ class App {
     }
 
     removeClass(name) {
-        this.manager.remove(this.classes, name);
+        const c = this.classes[name];
+        Object.keys(c.methods).filter((method) => method != "Constructor").forEach((method) => c.removeMethod(method));
+        Object.keys(c.variables).forEach((variable) => c.removeVariable(variable));
+        this.manager.remove(this.classes, name, ["new instance"]);
     }
 
     renameClass(oldName, newName) {

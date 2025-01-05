@@ -1,3 +1,10 @@
+## HJN-2.0.12
+#### ADDED
+- node update when adding a method parameter
+- node update when adding a method return
+- node update when removing a method parameter
+- node update when removing a method return
+
 ## HJN-2.0.11
 #### ADDED
 - new instance nodes update when removing a class parameter

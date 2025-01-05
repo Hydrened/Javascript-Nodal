@@ -3,7 +3,7 @@ class Manager {
         this.app = app;
     }
 
-    create(values, name, exception, displayType, nodeTypes, then) {
+    create(values, name, exception, displayType, nodeTypesToUpdate, then) {
         if (!Array.isArray(values)) values = Object.keys(values);
         if (!values.includes(name)) {
             if (then) then();
@@ -12,16 +12,9 @@ class Manager {
             if (this.app.currentClass) {
                 const method = this.app.currentClass.currentMethod;
                 
-                if (nodeTypes) Object.values(this.app.classes).forEach((c) => Object.values(c.methods).forEach((m) => m.nodes.filter((node) => nodeTypes.includes(node.data.type)).forEach((node) => {
-                    const isParameter = displayType.toLowerCase().includes("parameter");
-                    if (isParameter) {
-                        node.data.parameters.push({
-                            title: name,
-                            type: "variable",
-                        });
-                    } else {
-
-                    }
+                Object.values(this.app.classes).forEach((c) => Object.values(c.methods).forEach((m) => m.nodes.filter((node) => nodeTypesToUpdate.includes(node.data.type)).forEach((node) => {
+                    const arr = (displayType.toLowerCase().includes("parameter")) ? node.data.parameters : node.data.returns;
+                    arr.push({ title: name, type: "variable" });
                     method.getLinksByNodeUID(node.uid).forEach((link) => link.hide());
                     node.hide();
                 })));
@@ -35,10 +28,11 @@ class Manager {
     }
 
     remove(values, nameToRemove, nodeTypesToRemove, linkersToRemove) {
-        if (!Array.isArray(linkersToRemove)) linkersToRemove = [];
-
-        if (Array.isArray(values)) values.splice(values.indexOf(nameToRemove), 1);
-        else delete values[nameToRemove];
+        if (Array.isArray(values)) {
+            const index = values.indexOf(nameToRemove);
+            if (index != -1) values.splice(index, 1);
+            else return false;
+        } else delete values[nameToRemove];
 
         Object.values(this.app.classes).forEach((c) => Object.values(c.methods).forEach((method) => {
             method.nodes.forEach((node) => {
@@ -49,8 +43,9 @@ class Manager {
                     node.data.returns.forEach((ret, index) => {
                         if (ret.title == nameToRemove) node.data.returns.splice(index, 1);
                     });
+
+                    method.getLinksByNodeUID(node.uid).forEach((link) => method.removeLink(link));
                     node.hide();
-                    method.getLinksByNodeUID(node.uid).forEach((link) => link.hide());
                 }
                 if (nodeTypesToRemove.includes(node.data.type)) method.removeNode(node);
             });
@@ -59,6 +54,7 @@ class Manager {
         this.app.currentClass.currentMethod.refreshNodes();
         setTimeout(() => this.app.currentClass.currentMethod.refreshLinks(), 200);
         this.app.interface.refresh();
+        return true;
     }
 
     rename(values, oldName, newName, displayType, nodeTypesToRename) {

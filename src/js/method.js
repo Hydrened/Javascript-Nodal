@@ -30,13 +30,13 @@ class Method {
     }
 
     createLocalVariable(name) {
-        this.app.manager.create(this.localVariables, name, null, "local variable", null, () => {
+        this.app.manager.create(this.localVariables, name, null, "local variable", [], () => {
             this.localVariables[name] = undefined;
         });
     }
 
     removeLocalVariable(name) {
-        this.app.manager.remove(this.localVariables, name, ["local variable"], null);
+        return this.app.manager.remove(this.localVariables, name, ["local variable"], []);
     }
 
     renameLocalVariable(oldName, newName) {
@@ -44,13 +44,13 @@ class Method {
     }
 
     createParameter(name) {
-        this.app.manager.create(this.parameters, name, null, "method parameter", [""], () => {
+        this.app.manager.create(this.parameters, name, null, "method parameter", ["method"], () => {
             this.parameters.push(name);
         });    
     }
 
     removeParameter(name) {
-        this.app.manager.remove(this.parameters, name, null);
+        return this.app.manager.remove(this.parameters, name, ["method parameter"], ["method"]);
     }
 
     renameParameter(oldName, newName) {
@@ -58,13 +58,13 @@ class Method {
     }
 
     createReturn(name) {
-        this.app.manager.create(this.returns, name, null, "method return", [""], () => {
+        this.app.manager.create(this.returns, name, null, "method return", ["method"], () => {
             this.returns.push(name);
         });    
     }
 
     removeReturn(name) {
-        this.app.manager.remove(this.returns, name, null);
+        return this.app.manager.remove(this.returns, name, [], ["method"]);
     }
 
     renameReturn(oldName, newName) {

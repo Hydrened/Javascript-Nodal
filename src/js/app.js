@@ -40,7 +40,7 @@ class App {
     }
 
     createClass(name) {
-        this.manager.create(this.classes, name, "Main", "class", null, () => {
+        this.manager.create(this.classes, name, "Main", "class", [], () => {
             this.classes[name] = new Class(this, name);
             this.openClass(name);
         });
@@ -51,8 +51,8 @@ class App {
         if (!c) return;
         Object.keys(c.methods).filter((method) => method != "Constructor").forEach((method) => c.removeMethod(method));
         Object.keys(c.variables).forEach((variable) => c.removeVariable(variable));
-        this.manager.remove(this.classes, name, ["new instance"], null);
         if (c == this.currentClass) this.openClass("Main");
+        return this.manager.remove(this.classes, name, ["new instance"], []);
     }
 
     renameClass(oldName, newName) {

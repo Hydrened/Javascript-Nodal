@@ -21,7 +21,7 @@ class Class {
     }
 
     createMethod(name) {
-        this.app.manager.create(this.methods, name, "Constructor", "method", null, () => {
+        this.app.manager.create(this.methods, name, "Constructor", "method", [], () => {
             this.methods[name] = new Method(this.app, this, name);
             this.openMethod(name);
         });
@@ -32,7 +32,7 @@ class Class {
         if (!method) return;
         if (this.currentMethod.name == name) this.openMethod("Constructor");
         Object.keys(method.localVariables).forEach((localVariable) => method.removeLocalVariable(localVariable));
-        this.app.manager.remove(this.methods, name, ["method"], null);
+        return this.app.manager.remove(this.methods, name, ["method"], []);
     }
 
     renameMethod(oldName, newName) {
@@ -48,13 +48,13 @@ class Class {
     }
 
     createVariable(name) {
-        this.app.manager.create(this.variables, name, null, "variable", null, () => {
+        this.app.manager.create(this.variables, name, null, "variable", [], () => {
             this.variables[name] = undefined;
         });
     }
 
     removeVariable(name) {
-        this.app.manager.remove(this.variables, name, ["class variable"], null);
+        return this.app.manager.remove(this.variables, name, ["class variable"], []);
     }
 
     renameVariable(oldName, newName) {
@@ -68,7 +68,7 @@ class Class {
     }
 
     removeParameter(name) {
-        this.app.manager.remove(this.parameters, name, ["class parameter"], ["new instance"]);
+        return this.app.manager.remove(this.parameters, name, ["class parameter"], ["new instance"]);
     }
 
     renameParameter(oldName, newName) {

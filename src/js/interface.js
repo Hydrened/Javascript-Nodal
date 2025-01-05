@@ -59,8 +59,8 @@ class Interface {
                     message: (name) => `Are you sure you want to remove class "${name}"?`,
                     options: (name) => [
                         { button: "Yes", call: () => {
-                            this.app.removeClass(name);
-                            this.app.success(`Successfully removed class "${name}"`);
+                            const removed = this.app.removeClass(name);
+                            if (removed) this.app.success(`Successfully removed class "${name}"`);
                         }},
                         { button: "Cancel", call: null },
                     ],
@@ -79,8 +79,8 @@ class Interface {
                     message: (name) => `Are you sure you want to remove method "${name}" from ${this.app.currentClass.name}?`,
                     options: (name) => [
                         { button: "Yes", call: () => {
-                            this.app.currentClass.removeMethod(name);
-                            this.app.success(`Successfully removed method "${name}" from ${this.app.currentClass.name}`);
+                            const removed = this.app.currentClass.removeMethod(name);
+                            if (removed) this.app.success(`Successfully removed method "${name}" from ${this.app.currentClass.name}`);
                         }},
                         { button: "Cancel", call: null },
                     ],
@@ -99,8 +99,8 @@ class Interface {
                     message: (name) => `Are you sure you want to remove variable "${name}" from ${this.app.currentClass.name}?`,
                     options: (name) => [
                         { button: "Yes", call: () => {
-                            this.app.currentClass.removeVariable(name);
-                            this.app.success(`Successfully removed variable "${name}" from ${this.app.currentClass.name}`);
+                            const removed = this.app.currentClass.removeVariable(name);
+                            if (removed) this.app.success(`Successfully removed variable "${name}" from ${this.app.currentClass.name}`);
                         }},
                         { button: "Cancel", call: null },
                     ],
@@ -119,8 +119,8 @@ class Interface {
                     message: (name) => `Are you sure you want to remove local variable "${name}" from ${this.app.currentClass.currentMethod.name}?`,
                     options: (name) => [
                         { button: "Yes", call: () => {
-                            this.app.currentClass.currentMethod.removeLocalVariable(name);
-                            this.app.success(`Successfully removed local variable "${name}" from ${this.app.currentClass.currentMethod.name}`);
+                            const removed = this.app.currentClass.currentMethod.removeLocalVariable(name);
+                            if (removed) this.app.success(`Successfully removed local variable "${name}" from ${this.app.currentClass.currentMethod.name}`);
                         }},
                         { button: "Cancel", call: null },
                     ],
@@ -163,8 +163,8 @@ class Interface {
                     message: (name) => `Are you sure you want to remove class parameter "${name}" from ${this.app.currentClass.name}?`,
                     options: (name) => [
                         { button: "Yes", call: () => {
-                            this.app.currentClass.removeParameter(name);
-                            this.app.success(`Successfully removed class parameter "${name}" from ${this.app.currentClass.name}`);
+                            const removed = this.app.currentClass.removeParameter(name);
+                            if (removed) this.app.success(`Successfully removed class parameter "${name}" from ${this.app.currentClass.name}`);
                         }},
                         { button: "Cancel", call: null },
                     ],
@@ -195,8 +195,8 @@ class Interface {
                     message: (name) => `Are you sure you want to remove method parameter "${name}" from ${this.app.currentClass.currentMethod.name}?`,
                     options: (name) => [
                         { button: "Yes", call: () => {
-                            this.app.currentClass.currentMethod.removeParameter(name);
-                            this.app.success(`Successfully removed method parameter "${name}" from ${this.app.currentClass.currentMethod.name}`);
+                            const removed = this.app.currentClass.currentMethod.removeParameter(name);
+                            if (removed) this.app.success(`Successfully removed method parameter "${name}" from ${this.app.currentClass.currentMethod.name}`);
                         }},
                         { button: "Cancel", call: null },
                     ],
@@ -215,8 +215,8 @@ class Interface {
                     message: (name) => `Are you sure you want to remove method return "${name}" from ${this.app.currentClass.currentMethod.name}?`,
                     options: (name) => [
                         { button: "Yes", call: () => {
-                            this.app.currentClass.currentMethod.removeReturn(name);
-                            this.app.success(`Successfully removed method return "${name}" from ${this.app.currentClass.currentMethod.name}`);
+                            const removed = this.app.currentClass.currentMethod.removeReturn(name);
+                            if (removed) this.app.success(`Successfully removed method return "${name}" from ${this.app.currentClass.currentMethod.name}`);
                         }},
                         { button: "Cancel", call: null },
                     ],

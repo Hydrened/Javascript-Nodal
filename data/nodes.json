@@ -23,15 +23,12 @@
         ],
         "returns": []
     },
+
     "10": {
-        "title": "Console Log",
+        "title": "Literal Variable",
         "from": "",
         "type": "function",
         "parameters": [
-            {
-                "type": "execute",
-                "title": ""
-            },
             {
                 "type": "variable",
                 "title": "Value"
@@ -39,108 +36,306 @@
         ],
         "returns": [
             {
-                "type": "execute",
+                "type": "variable",
                 "title": ""
             }
         ]
     },
-    "11": {
-        "title": "If",
-        "from": "",
-        "type": "function",
-        "parameters": [
-            {
-                "type": "execute",
-                "title": ""
-            },
-            {
-                "type": "variable",
-                "title": "Condition"
-            }
-        ],
-        "returns": [
-            {
-                "type": "execute",
-                "title": "True"
-            },
-            {
-                "type": "execute",
-                "title": "False"
-            }
-        ]
-    },
-    "12": {
-        "title": "For",
-        "from": "",
-        "type": "function",
-        "parameters": [
-            {
-                "type": "execute",
-                "title": ""
-            },
-            {
-                "type": "variable",
-                "title": "start"
-            },
-            {
-                "type": "variable",
-                "title": "end"
-            }
-        ],
-        "returns": [
-            {
-                "type": "execute",
-                "title": "Loop"
-            },
-            {
-                "type": "variable",
-                "title": "index"
-            },
-            {
-                "type": "execute",
-                "title": "Completed"
-            }
-        ]
-    },
+
     "100": {
-        "title": "Add",
+        "title": "Is Finite",
         "from": "",
         "type": "function",
         "parameters": [
             {
                 "type": "variable",
-                "title": "Number 1"
-            },
-            {
-                "type": "variable",
-                "title": "Number 2"
+                "title": "Value"
             }
         ],
         "returns": [
             {
                 "type": "variable",
-                "title": "Result"
+                "title": "Is Finite"
             }
         ]
     },
     "101": {
-        "title": "Is equal",
+        "title": "Is NaN",
         "from": "",
         "type": "function",
         "parameters": [
             {
                 "type": "variable",
-                "title": "Value 1"
-            },
-            {
-                "type": "variable",
-                "title": "Value 2"
+                "title": "Value"
             }
         ],
         "returns": [
             {
                 "type": "variable",
-                "title": "Is equal"
+                "title": "Is NaN"
+            }
+        ]
+    },
+    "102": {
+        "title": "Parse Float",
+        "from": "",
+        "type": "function",
+        "parameters": [
+            {
+                "type": "variable",
+                "title": "Value"
+            }
+        ],
+        "returns": [
+            {
+                "type": "variable",
+                "title": "Float"
+            }
+        ]
+    },
+    "103": {
+        "title": "Parse Integer",
+        "from": "",
+        "type": "function",
+        "parameters": [
+            {
+                "type": "variable",
+                "title": "Value"
+            },
+            {
+                "type": "variable",
+                "title": "Base"
+            }
+        ],
+        "returns": [
+            {
+                "type": "variable",
+                "title": "Integer"
+            }
+        ]
+    },
+    "104": {
+        "title": "Parse Float",
+        "from": "",
+        "type": "function",
+        "parameters": [
+            {
+                "type": "variable",
+                "title": "Value"
+            }
+        ],
+        "returns": [
+            {
+                "type": "variable",
+                "title": "Float"
+            }
+        ]
+    },
+
+    "200": {
+        "title": "AND",
+        "from": "",
+        "type": "function",
+        "parameters": [
+            {
+                "type": "variable",
+                "title": ""
+            },
+            {
+                "type": "variable",
+                "title": ""
+            }
+        ],
+        "returns": [
+            {
+                "type": "variable",
+                "title": "Bool"
+            }
+        ]
+    },
+    "201": {
+        "title": "OR",
+        "from": "",
+        "type": "function",
+        "parameters": [
+            {
+                "type": "variable",
+                "title": ""
+            },
+            {
+                "type": "variable",
+                "title": ""
+            }
+        ],
+        "returns": [
+            {
+                "type": "variable",
+                "title": "Bool"
+            }
+        ]
+    },
+    "202": {
+        "title": "XOR",
+        "from": "",
+        "type": "function",
+        "parameters": [
+            {
+                "type": "variable",
+                "title": ""
+            },
+            {
+                "type": "variable",
+                "title": ""
+            }
+        ],
+        "returns": [
+            {
+                "type": "variable",
+                "title": "Bool"
+            }
+        ]
+    },
+    "203": {
+        "title": "NOT",
+        "from": "",
+        "type": "function",
+        "parameters": [
+            {
+                "type": "variable",
+                "title": ""
+            }
+        ],
+        "returns": [
+            {
+                "type": "variable",
+                "title": "Bool"
+            }
+        ]
+    },
+
+    "300": {
+        "title": "Is Equal",
+        "from": "",
+        "type": "function",
+        "parameters": [
+            {
+                "type": "variable",
+                "title": ""
+            },
+            {
+                "type": "variable",
+                "title": ""
+            }
+        ],
+        "returns": [
+            {
+                "type": "variable",
+                "title": "Is Equal"
+            }
+        ]
+    },
+    "301": {
+        "title": "Is Different",
+        "from": "",
+        "type": "function",
+        "parameters": [
+            {
+                "type": "variable",
+                "title": ""
+            },
+            {
+                "type": "variable",
+                "title": ""
+            }
+        ],
+        "returns": [
+            {
+                "type": "variable",
+                "title": "Is Different"
+            }
+        ]
+    },
+    "302": {
+        "title": "Less Than",
+        "from": "",
+        "type": "function",
+        "parameters": [
+            {
+                "type": "variable",
+                "title": ""
+            },
+            {
+                "type": "variable",
+                "title": ""
+            }
+        ],
+        "returns": [
+            {
+                "type": "variable",
+                "title": "Is Less Than"
+            }
+        ]
+    },
+    "303": {
+        "title": "Greater Than",
+        "from": "",
+        "type": "function",
+        "parameters": [
+            {
+                "type": "variable",
+                "title": ""
+            },
+            {
+                "type": "variable",
+                "title": ""
+            }
+        ],
+        "returns": [
+            {
+                "type": "variable",
+                "title": "Is Greater Than"
+            }
+        ]
+    },
+    "304": {
+        "title": "Less Than or Equal",
+        "from": "",
+        "type": "function",
+        "parameters": [
+            {
+                "type": "variable",
+                "title": ""
+            },
+            {
+                "type": "variable",
+                "title": ""
+            }
+        ],
+        "returns": [
+            {
+                "type": "variable",
+                "title": "Is Less Than or Equal"
+            }
+        ]
+    },
+    "305": {
+        "title": "Greater Than or Equal",
+        "from": "",
+        "type": "function",
+        "parameters": [
+            {
+                "type": "variable",
+                "title": ""
+            },
+            {
+                "type": "variable",
+                "title": ""
+            }
+        ],
+        "returns": [
+            {
+                "type": "variable",
+                "title": "Is Greater Than or Equal"
             }
         ]
     }
